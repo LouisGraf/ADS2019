@@ -3,8 +3,8 @@ Applied Data Science
 author: Statistical Programming with R
 date: 18.03.2019
 autosize: false
-width: 1280
-height: 720
+width: 1920
+height: 1080
 font-family: 'Rockwell'
 css: mySlideTemplate.css
 
@@ -47,7 +47,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 
 Package Management
 ========================================================
-* Packages are collections of R functions, data, and compiled code
+* Packages are collections of R functions, data, and compiled code
 * Numerous packages are available for download and installation
 * Installing and loading is done via the GUI or the console (script)
 * Example for installing and loading the `tidyverse` package
@@ -100,7 +100,7 @@ Vectors
 numericVector <- c(1.2, 1.3, 1.4)
 ```
 
-* The number of members in a vector is given by the length function:
+* The number of members in a vector is given by the length function:
 ```{r}
 length(numericVector)
 ```
@@ -269,28 +269,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 
 
 
-Matrices
-========================================================
-* A matrix is a collection of data elements arranged in a two-dimensional rectangular layout
-* Matrices are created in R with the matrix function
 
-```{r}
-A = matrix(c(2,4,3,1,5,7), nrow=2, ncol=3, byrow = TRUE)
-A
-```
-
-
-
-
-<footer class = 'footnote'>
-<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
-</footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
 
 NA Values
 ========================================================
@@ -319,14 +298,6 @@ NA Handling
 is.na(v)
 mean(v[!is.na(v)])
 ```
-***
-
-* Replace NA values
-```{r}
-v.na.replaced <- v
-v.na.replaced[is.na(v)] <- 0
-mean(v.na.replaced)
-```
 
 
 <footer class = 'footnote'>
@@ -339,11 +310,35 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 
+
+***
+
+* Replace NA values
+```{r}
+v.na.replaced <- v
+v.na.replaced[is.na(v)] <- 0
+mean(v.na.replaced)
+```
+
+
+
 Logical Expressions
 ========================================================
 * A AND B: `A & B`
 * A OR B: `A | B`
 * IF-THEN-ELSE: `ifelse(v>=0, "+", "-")`
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
 
 ***
 
@@ -355,6 +350,16 @@ Logical Expressions
     * `%in%` left element in vector on right
 
 
+
+Standard statistical expressions
+========================================================
+```{r}
+v = sample(1:6, 5, T)
+mean(v)
+max(v)
+min(v)
+```
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
@@ -365,14 +370,6 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 
-Standard statistical expressions
-========================================================
-```{r}
-v = sample(1:6, 5, T)
-mean(v)
-max(v)
-min(v)
-```
 
 ***
 ```{r}
@@ -384,6 +381,16 @@ quantile(v)
 
 
 
+Extracting Information from Objects
+========================================================
+```{r}
+str(v) #structure
+summary(v) #summary
+class(v) #class
+head(v, 5) #first 5 elements
+```
+
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
@@ -394,13 +401,6 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 
-Extracting Information from Objects
-========================================================
-```{r}
-str(v) #structure
-summary(v) #summary
-class(v) #class
-```
 
 ***
 
@@ -412,6 +412,14 @@ unique(v) #unique value
 
 
 
+Character vector manipulation
+========================================================
+* The command `paste` creates a single string from the argument vectors’ character representations, sep specifies the separator
+```{r}
+paste(LETTERS[1:8], 1:4, sep="!") 
+```
+
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
@@ -422,12 +430,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 
-Character vector manipulation
-========================================================
-* The command `paste` creates a single string from the argument vectors’ character representations, sep specifies the separator
-```{r}
-paste(LETTERS[1:8], 1:4, sep="!") 
-```
+
 ***
 * `paste0` offers a shortcut
 ```{r}
@@ -436,17 +439,6 @@ paste0(rep("A", 5), 1:4)
 ```
 
 
-
-
-<footer class = 'footnote'>
-<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
-</footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
 
 
 
@@ -465,6 +457,18 @@ substr("ABCDEFG",
 sprintf("%s is %f feet tall", "Sven", 7.1)
 ```
 
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
 ***
 
 * Splitting string on characters
@@ -479,17 +483,6 @@ nchar("ABC")
 ```
 
 
-</style>
-<footer class = 'footnote'>
-<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
-</footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
-
 
 String operations (2)
 ========================================================
@@ -501,16 +494,7 @@ grepl(pattern = "aus",
 grepl(pattern = "haus",
       x = "Nikolaus")
 ```
-***
 
-* Replacement
-```{r}
-gsub(pattern = "aus",
-     replacement = "aushaus",
-     x = "Nikolaus")
-```
-
-</style>
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
@@ -520,6 +504,17 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 <img src = "uni-wuerzburg-logo.svg" width="160">
 </div>
 </footer>
+
+***
+
+* Replacement
+```{r}
+gsub(pattern = "aus",
+     replacement = "aushaus",
+     x = "Nikolaus")
+```
+
+
 
 lubridate – temporal data made easy
 ========================================================
@@ -540,6 +535,16 @@ leave <- ymd_hms("2011-08-10 14:00:00")
 wday(arrive) #also second / hour ...
 ```
 
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
 ***
 ```{r}
 wday(arrive, label = TRUE)
@@ -554,7 +559,461 @@ int_overlaps(A,B)
 
 
 
-</style>
+
+Programming task 1 (Dices.R)
+========================================================
+* Create two vectors which reflecting 100 throws of two standard dices by sampling from 1:6.
+    * How often did dice 1 show the higher number?
+    * How often did dice 1 show a number which was at least 3 larger than dice 2?
+    * Compare the ten highest throws of the two dices
+
+* Create a third vector reflecting the sum of the two other throws
+    * Determine the five highest and the five lowest combined scores
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Matrices
+========================================================
+* A matrix is a collection of data elements arranged in a two-dimensional rectangular layout
+* Matrices are created in R with the matrix function
+
+```{r}
+A = matrix(c(2,4,3,1,5,7), nrow=2, ncol=3, byrow = TRUE)
+A
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+Data frames
+========================================================
+* A data frame is used for storing data tables
+* It is a collection of vectors of equal length
+* For example, here is a built-in data frame in R, called `mtcars`.
+```{r echo=FALSE, paged.print=TRUE}
+head(mtcars, 5) #first 5 elements
+```
+
+* The top line of the table, called the header, contains the column names
+* Each horizontal line afterward denotes a data row, which begins with the name of the row, and then followed by the actual data Each data member of a row is called a cell
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Adressing Data frames
+========================================================
+* To retrieve data in a cell, we would enter its row and column coordinates in the single square bracket `[]` operator
+```{r}
+mtcars[1, 2]
+mtcars["Mazda RX4", "cyl"]
+```
+* Subsetting of data frames in base R relies on addressing using vectors instead of single values
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+* Individual columns are accessed and created using the $ operator
+```{r}
+head(mtcars$mpg, 5)
+mtcars$l100km = 282.48 / mtcars$mpg
+head(mtcars$l100km, 5)
+```
+
+* Going forward, data frames will be our most important object
+* Base R is fairly clunky in operating on data frames. Soon we will explore the `tidyverse` which features very elegant and efficient ways for data frame manipulation
+
+
+Programming task 2 (Cars.R)
+========================================================
+* What is the mean / max / min mpg of the cars?
+
+* Create a new column which states the ratio of power vs. weight
+    * Which is the best car according to this dimension?
+
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+Creating Data Frames
+========================================================
+
+* Manual specification of data frame df
+```{r}
+n = c(2, 3, 5)
+s = c("aa", "bb", "cc")
+b = c(TRUE, FALSE, TRUE)
+df = data.frame(n, s, b)
+df
+```
+
+* Reading external data from text files `df = read.csv2("pathToData", header=TRUE, sep =";")`
+* `read.csv2` will also work on URL to remote files, e.g.,
+```{r}
+hsb2 <- read.csv2('https://raw.githubusercontent.com/rpruim/OpenIntro/master/data/hsb2.csv', header=T, sep=",")
+head(hsb2,2)
+```
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Extending Data Frames
+========================================================
+
+* Extra rows: `rbind`
+```{r}
+
+df1 = data.frame(numbers=c(1, 2, 3), letters=c("a", "b", "c"))
+df2 = data.frame(numbers=c(4), letters=c("d"))
+rbind(df1, df2)
+
+```
+
+
+* Extra columns: `cbind`
+```{r}
+
+df1 = data.frame(numbers=c(1, 2, 3, 4))
+df2 = data.frame(letters=c("a", "b", "c", "d"))
+cbind(df1, df2)
+
+```
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Extending Data Frames
+========================================================
+
+* A list is a generic vector containing different objects.
+* We will typically avoid using this unstructured format but may often face it when obtaining data through web services
+
+```{r}
+n = c(2, 3, 5)
+s = c("aa", "bb", "cc", "dd", "ee")
+b = c(TRUE, FALSE, TRUE, FALSE, FALSE)
+x = list(n, s, b, 3)   # x contains copies of n, s, b
+x
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+*** 
+* Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator – result is still a list
+```{r}
+typeof(x[1])
+```
+
+* List elements: We retrieve list elements with the double square bracket `[[]]` operator – result is the original type
+```{r}
+typeof(x[[1]])
+```
+
+* Named elements: Similar to data frame columns the list elements can be named and referenced using these names
+* `unlist(x)` converts (flattens) a list of vectors into a single vector
+
+Webservice example
+========================================================
+* JSON call from google API - Retrieve bars within 500 meters of Sanderring 2
+
+```{r}
+URL <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=AIzaSyA-ffYLtUhHqRdmKfCDVZQt4mxokjS6h80"
+library(RCurl)
+library(RJSONIO)
+response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
+```
+
+* The google webservice returns an XML file which is parsed by R into a list
+* Parsed response is a list of three lists – results are stored in the list results
+
+```{r}
+names(response_parsed)
+```
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Webservice example (2)
+========================================================
+
+```{r}
+names(response_parsed$results[[1]])
+response_parsed$results[[1]]$name
+response_parsed$results[[1]]$geometry$location
+response_parsed$results[[1]]$rating
+
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Another API
+========================================================
+
+```{r}
+
+URL = "https://www.anapioficeandfire.com/api/characters?page=1&pageSize=200"
+response_parsed_got <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
+names(response_parsed_got[[27]])
+response_parsed_got[[27]]$name
+response_parsed_got[[27]]$title
+response_parsed_got[[27]]$died
+
+
+```
+
+
+R Functions
+========================================================
+* R allows us to easily and elegantly write virtually any function that we want to implement
+* Basic setup for functions:
+`fun <- function(arguments) {code}`
+* Multiple calculation steps are separated by line breaks
+* Without return statement the last evaluation result is returned, if multiple calculations should be returned use `return()`
+* For multiple return values use vector or list
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+```{r}
+fun <- function(x, y) {x+y}
+fun(1,5)
+fun2 <- function(x, y) {
+  z1 <- 2*x + y
+  z2 <- x + 2*y
+  return(c(z1, z2))}
+fun2(1,5)
+```
+
+Programming task 3 (Ratings.R)
+========================================================
+* Create a function getNameAndRating(listing) that returns name and rating for a Google Places Listing (from our earlier API call) as a data frame
+
+* NB: If there is no rating available return -1 using ifelse
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Applying functions to vectors / data frames / lists
+========================================================
+
+* Very often we may be interested in performing the same operation on multiple entries
+* While looping is possible in R it should typically avoided
+* In base R the `apply` scheme covers this approach, in this course we use the more versatile and performant map function from the `purrr` package
+
+`library(purrr)`
+
+`map(.x, .f) for every element of .x apply .f`
+
+* The base map function returns a list, there are special versions returning typed vectors or data frames: e.g., `map_chr`, `map_dbl`, `map_df`, ...
+* For functions with two arguments use `map2(.x, .y, .f)`
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+@JennyBryan Lego illustrations
+========================================================
+![optional caption text](figures/minis1.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+@JennyBryan Lego illustrations - map
+========================================================
+![optional caption text](figures/minis2.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+@JennyBryan Lego illustrations - map2
+========================================================
+![optional caption text](figures/minis3.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+@JennyBryan Lego illustrations - map2
+========================================================
+![optional caption text](figures/minis4.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+@JennyBryan Lego illustrations
+========================================================
+![](figures/minis5.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+@JennyBryan Lego illustrations - map2
+========================================================
+![](figures/minis6.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Programming task 4 (Ratings.R)
+========================================================
+* Leveraging our function, get names and ratings of all bars from our API call in a nice data frame
+
+
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
