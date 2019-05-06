@@ -1,0 +1,566 @@
+Applied Data Science
+========================================================
+author: Statistical Programming with R
+date: 18.03.2019
+autosize: false
+width: 1280
+height: 720
+font-family: 'Rockwell'
+css: mySlideTemplate.css
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 50px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 25px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="320">
+</div>
+</footer>
+
+R Syntax
+========================================================
+* Lightweight, script-oriented syntax
+* No line ends (e.g., “;” in JAVA)
+* Common mathematical operators are used:
+* Whitespace typically without meaning
+* Round brackets: Function arguments, e.g., `mean(x)`
+* Square brackets: Array locations, e.g., `playerList[1]`
+* Curly brackets: Code blocks (e.g., around loops or logical structures)
+* Values are assigned using `<-` or `=`
+* Comments initalized by `#`
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+
+
+
+Package Management
+========================================================
+* Packages are collections of R functions, data, and compiled code
+* Numerous packages are available for download and installation
+* Installing and loading is done via the GUI or the console (script)
+* Example for installing and loading the `tidyverse` package
+    * With root privileges
+        * `install.packages(“tidyverse")`
+        * `library(tidyverse)`
+    * Without root privileges
+        * `install.packages("tidyverse", lib="/data/Rpackages/")`
+        * `library(tidyverse, lib.loc="/data/Rpackages/")`
+        
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+R Objects and Data Types
+========================================================
+* Everything in R is an object
+* No strict but dynamic typing
+* Basic data types available in R:
+    * Numeric: decimal numbers `2.3`
+    * Integer: integer numbers `2`
+    * Logical: true / false values `TRUE`
+    * Character: single or multiple characters `"TWO"`
+    * (Ordered) Factor: discrete values from a pre-defined scale `"good", "medium", "bad"`
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Vectors
+========================================================
+* A vector is a sequence of data elements of the same basic type
+    * Members of a vector are called components
+    * Vectors are initialized using the `c()` command
+    
+```{r}
+numericVector <- c(1.2, 1.3, 1.4)
+```
+
+* The number of members in a vector is given by the length function:
+```{r}
+length(numericVector)
+```
+
+Some vector creation helpers: Sequences
+========================================================
+The `seq` function has three arguments:
+* `from`: starting point
+* `to`: end point
+* `by`: increment
+```{r}
+seq(10, 100, by=10)
+```
+The colon operator `1:10` is a shorthand for `by=1`
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Some vector creation helpers: Repetitions / Replications
+========================================================
+The `rep` function has two arguments:
+* `x`: object to be replicated
+* `times`: how often
+
+```{r}
+rep(10, 10) 
+```
+Note: The first argument can be again a vector (e.g., sequences)
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Vector Recycling
+========================================================
+* If a vector is of insufficient length for an operation, R will recycle previous values
+* If longer length is not a mutltiple it will raise a warning
+
+
+```{r warning=TRUE}
+x = c(10,11,12,13)
+x + c(0,1)
+x + c(0,1,2)
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Subsetting Vectors
+========================================================
+* Vector subsetting is done via the `[]` operator
+* Positive integers return elements at the specified positions (whitelisting), identical indexes will yield duplicates
+```{r}
+x=LETTERS
+x[1:3]
+x[c(1,1)]
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Subsetting Vectors (2)
+========================================================
+* Negative integers suppress elements at the specified positions (blacklisting)
+You cannot mix positive and negative integers in subsetting!
+
+```{r}
+x[-seq(1,26,2)]
+```
+
+* Logical vectors will return all positions where the vector is TRUE, This is clearly the most useful approach if we master logical expressions
+```{r}
+x[x<"D"]
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Sorting Vectors
+========================================================
+```{r}
+x = c(4, 3, 6, 2, 1, 10, 5, 8, 9, 7)
+sort(x)
+sort(x, decreasing = T)
+order(x)
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Sampling from Vectors
+========================================================
+```{r}
+sample(1:6, 5) #sample from a vector (no replacement)
+sample(1:6, 5, replace = T) #sample from a vector (replacement)
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+
+Matrices
+========================================================
+* A matrix is a collection of data elements arranged in a two-dimensional rectangular layout
+* Matrices are created in R with the matrix function
+
+```{r}
+A = matrix(c(2,4,3,1,5,7), nrow=2, ncol=3, byrow = TRUE)
+A
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+NA Values
+========================================================
+* Oftentimes we will have missing or corrupt data
+* These will often pop up as NA entries
+* Running analyses on these values can cause problems
+```{r}
+set.seed(1)
+v = sample(c(NA,1,2,3),8,replace = T)
+mean(v)
+```
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+NA Handling
+========================================================
+* Identify and remove NA values
+```{r}
+is.na(v)
+mean(v[!is.na(v)])
+```
+***
+
+* Replace NA values
+```{r}
+v.na.replaced <- v
+v.na.replaced[is.na(v)] <- 0
+mean(v.na.replaced)
+```
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Logical Expressions
+========================================================
+* A AND B: `A & B`
+* A OR B: `A | B`
+* IF-THEN-ELSE: `ifelse(v>=0, "+", "-")`
+
+***
+
+* Conditions may include the following:
+    * `==` equal
+    * `!=` not equal to
+    * `> (>=)` greater (or equal) than
+    * `< (<=)` less (or equal) than
+    * `%in%` left element in vector on right
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Standard statistical expressions
+========================================================
+```{r}
+v = sample(1:6, 5, T)
+mean(v)
+max(v)
+min(v)
+```
+
+***
+```{r}
+length(v)
+length(v[v>3])
+quantile(v)
+
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Extracting Information from Objects
+========================================================
+```{r}
+str(v) #structure
+summary(v) #summary
+class(v) #class
+```
+
+***
+
+```{r}
+length(v) #number of elements
+dim(v) #dimensionality
+unique(v) #unique value
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Character vector manipulation
+========================================================
+* The command `paste` creates a single string from the argument vectors’ character representations, sep specifies the separator
+```{r}
+paste(LETTERS[1:8], 1:4, sep="!") 
+```
+***
+* `paste0` offers a shortcut
+```{r}
+paste(rep("A", 5), 1:4, sep="")
+paste0(rep("A", 5), 1:4)
+```
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+
+
+String operations (1)
+========================================================
+
+* Extracting substrings
+```{r}
+substr("ABCDEFG",
+       start=2, stop=3)
+```
+
+* Constructing compound strings with `sprintf()`
+```{r}
+sprintf("%s is %f feet tall", "Sven", 7.1)
+```
+
+***
+
+* Splitting string on characters
+```{r}
+x <- "Split words."
+strsplit(x, " ") # Result is a list – use unlist as needed
+```
+
+* String length
+```{r}
+nchar("ABC")
+```
+
+
+</style>
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+String operations (2)
+========================================================
+
+* Check if string `x` contains expression `pattern`
+```{r}
+grepl(pattern = "aus",
+      x = "Nikolaus")
+grepl(pattern = "haus",
+      x = "Nikolaus")
+```
+***
+
+* Replacement
+```{r}
+gsub(pattern = "aus",
+     replacement = "aushaus",
+     x = "Nikolaus")
+```
+
+</style>
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+lubridate – temporal data made easy
+========================================================
+
+```{r echo=FALSE, warning=FALSE}
+library(lubridate)
+```
+* Parsing time strings
+```{r}
+a = ymd("20110720")
+c = dmy("31/08/2011")
+arrive <- ymd_hms("2011-06-04 12:00:00")
+leave <- ymd_hms("2011-08-10 14:00:00")
+```
+
+* Extracting time details
+```{r}
+wday(arrive) #also second / hour ...
+```
+
+***
+```{r}
+wday(arrive, label = TRUE)
+```
+
+* Time intervals
+```{r}
+A <- interval(arrive, leave)
+B <- interval(a, c)
+int_overlaps(A,B)
+```
+
+
+
+</style>
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
