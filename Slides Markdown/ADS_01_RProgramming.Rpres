@@ -787,7 +787,7 @@ Webservice example
 * JSON call from google API - Retrieve bars within 500 meters of Sanderring 2
 
 ```{r}
-URL <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=AIzaSyA-ffYLtUhHqRdmKfCDVZQt4mxokjS6h80"
+URL <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key="
 library(RCurl)
 library(RJSONIO)
 response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
