@@ -19,10 +19,15 @@ Prof. Dr. Christoph Flath</div>
 </div>
 </footer>
 
+```{r include=FALSE}
+set.seed(1)
+```
+
+
 R Syntax
 ========================================================
 * Lightweight, script-oriented syntax
-* No line ends (e.g., “;” in JAVA)
+* No line ends (e.g., ";" in JAVA)
 * Common mathematical operators are used:
 * Whitespace typically without meaning
 * Round brackets: Function arguments, e.g., `mean(x)`
@@ -52,7 +57,7 @@ Package Management
 * Installing and loading is done via the GUI or the console (script)
 * Example for installing and loading the `tidyverse` package
     * With root privileges
-        * `install.packages(“tidyverse")`
+        * `install.packages("tidyverse")`
         * `library(tidyverse)`
     * Without root privileges
         * `install.packages("tidyverse", lib="/data/Rpackages/")`
@@ -77,7 +82,7 @@ R Objects and Data Types
     * Numeric: decimal numbers `2.3`
     * Integer: integer numbers `2`
     * Logical: true / false values `TRUE`
-    * Character: single or multiple characters `"TWO"`
+    * Character: single or multiple characters `"HOUSE"`
     * (Ordered) Factor: discrete values from a pre-defined scale `"good", "medium", "bad"`
 
 <footer class = 'footnote'>
@@ -274,7 +279,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 NA Values
 ========================================================
 * Oftentimes we will have missing or corrupt data
-* These will often pop up as NA entries
+* These will often pop up as `NA` entries
 * Running analyses on these values can cause problems
 ```{r}
 set.seed(1)

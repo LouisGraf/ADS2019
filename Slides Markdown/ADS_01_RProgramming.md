@@ -19,10 +19,13 @@ Prof. Dr. Christoph Flath</div>
 </div>
 </footer>
 
+
+
+
 R Syntax
 ========================================================
 * Lightweight, script-oriented syntax
-* No line ends (e.g., “;” in JAVA)
+* No line ends (e.g., ";" in JAVA)
 * Common mathematical operators are used:
 * Whitespace typically without meaning
 * Round brackets: Function arguments, e.g., `mean(x)`
@@ -52,7 +55,7 @@ Package Management
 * Installing and loading is done via the GUI or the console (script)
 * Example for installing and loading the `tidyverse` package
     * With root privileges
-        * `install.packages(“tidyverse")`
+        * `install.packages("tidyverse")`
         * `library(tidyverse)`
     * Without root privileges
         * `install.packages("tidyverse", lib="/data/Rpackages/")`
@@ -77,7 +80,7 @@ R Objects and Data Types
     * Numeric: decimal numbers `2.3`
     * Integer: integer numbers `2`
     * Logical: true / false values `TRUE`
-    * Character: single or multiple characters `"TWO"`
+    * Character: single or multiple characters `"HOUSE"`
     * (Ordered) Factor: discrete values from a pre-defined scale `"good", "medium", "bad"`
 
 <footer class = 'footnote'>
@@ -330,7 +333,7 @@ sample(1:6, 5) #sample from a vector (no replacement)
 ```
 
 ```
-[1] 1 5 6 3 2
+[1] 2 6 3 4 1
 ```
 
 ```r
@@ -338,7 +341,7 @@ sample(1:6, 5, replace = T) #sample from a vector (replacement)
 ```
 
 ```
-[1] 6 5 1 5 6
+[1] 6 6 4 4 1
 ```
 
 
@@ -360,7 +363,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 NA Values
 ========================================================
 * Oftentimes we will have missing or corrupt data
-* These will often pop up as NA entries
+* These will often pop up as `NA` entries
 * Running analyses on these values can cause problems
 
 ```r
@@ -1191,7 +1194,7 @@ The following object is masked from 'package:base':
     date
 
 Loading required package: bitops
-Quitting from lines 818-823 (ADS_01_RProgramming.Rpres) 
+Quitting from lines 823-828 (ADS_01_RProgramming.Rpres) 
 Fehler in response_parsed$results[[1]] : Indizierung außerhalb der Grenzen
 Ruft auf: knit ... handle -> withCallingHandlers -> withVisible -> eval -> eval
 Zusätzlich: Warnmeldungen:
