@@ -191,8 +191,8 @@ x + c(0,1,2)
 ```
 
 ```
-Warning in x + c(0, 1, 2): Länge des längeren Objektes
- 	 ist kein Vielfaches der Länge des kürzeren Objektes
+Warning in x + c(0, 1, 2): longer object length is not a multiple of
+shorter object length
 ```
 
 ```
@@ -800,8 +800,8 @@ wday(arrive, label = TRUE)
 ```
 
 ```
-[1] Sa
-Levels: So < Mo < Di < Mi < Do < Fr < Sa
+[1] Sat
+Levels: Sun < Mon < Tue < Wed < Thu < Fri < Sat
 ```
 
 * Time intervals
@@ -1109,7 +1109,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 *** 
-* Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator – result is still a list
+* Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator <U+2013> result is still a list
 
 ```r
 typeof(x[1])
@@ -1119,7 +1119,7 @@ typeof(x[1])
 [1] "list"
 ```
 
-* List elements: We retrieve list elements with the double square bracket `[[]]` operator – result is the original type
+* List elements: We retrieve list elements with the double square bracket `[[]]` operator <U+2013> result is the original type
 
 ```r
 typeof(x[[1]])
@@ -1179,21 +1179,5 @@ Webservice example (2)
 
 
 ```
-processing file: ADS_01_RProgramming.Rpres
-
-Attaching package: 'lubridate'
-
-The following object is masked from 'package:base':
-
-    date
-
-Loading required package: bitops
-Quitting from lines 822-827 (ADS_01_RProgramming.Rpres) 
-Fehler in response_parsed$results[[1]] : Indizierung außerhalb der Grenzen
-Ruft auf: knit ... handle -> withCallingHandlers -> withVisible -> eval -> eval
-Zusätzlich: Warnmeldungen:
-1: package 'lubridate' was built under R version 3.4.4 
-2: package 'RCurl' was built under R version 3.4.4 
-3: package 'RJSONIO' was built under R version 3.4.4 
-Ausführung angehalten
+Error in response_parsed$results[[1]] : subscript out of bounds
 ```
