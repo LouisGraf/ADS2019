@@ -609,7 +609,7 @@ unique(v) #unique value
 
 Character vector manipulation
 ========================================================
-* The command `paste` creates a single string from the argument vectors’ character representations, sep specifies the separator
+* The command `paste` creates a single string from character representations of the argument vectors, sep specifies the separator
 
 ```r
 paste(LETTERS[1:8], 1:4, sep="!") 
@@ -697,12 +697,6 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 
 ```r
 x <- "Split words."
-strsplit(x, " ") # Result is a list – use unlist as needed
-```
-
-```
-[[1]]
-[1] "Split"  "words."
 ```
 
 * String length
@@ -766,7 +760,7 @@ gsub(pattern = "aus",
 
 
 
-lubridate – temporal data made easy
+lubridate: temporal data made easy
 ========================================================
 
 
@@ -1151,7 +1145,7 @@ response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L)
 ```
 
 * The google webservice returns an XML file which is parsed by R into a list
-* Parsed response is a list of three lists – results are stored in the list results
+* Parsed response is a list of three lists, results are stored in the list results
 
 
 ```r
@@ -1194,7 +1188,7 @@ The following object is masked from 'package:base':
     date
 
 Loading required package: bitops
-Quitting from lines 823-828 (ADS_01_RProgramming.Rpres) 
+Quitting from lines 822-827 (ADS_01_RProgramming.Rpres) 
 Fehler in response_parsed$results[[1]] : Indizierung außerhalb der Grenzen
 Ruft auf: knit ... handle -> withCallingHandlers -> withVisible -> eval -> eval
 Zusätzlich: Warnmeldungen:
