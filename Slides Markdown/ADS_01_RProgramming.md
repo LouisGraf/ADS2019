@@ -191,8 +191,13 @@ x + c(0,1,2)
 ```
 
 ```
+<<<<<<< HEAD
 Warning in x + c(0, 1, 2): Länge des längeren Objektes
  	 ist kein Vielfaches der Länge des kürzeren Objektes
+=======
+Warning in x + c(0, 1, 2): longer object length is not a multiple of
+shorter object length
+>>>>>>> 26015d3712b85a02a0b80eb2317118a2d09de31d
 ```
 
 ```
@@ -806,8 +811,8 @@ wday(arrive, label = TRUE)
 ```
 
 ```
-[1] Sa
-Levels: So < Mo < Di < Mi < Do < Fr < Sa
+[1] Sat
+Levels: Sun < Mon < Tue < Wed < Thu < Fri < Sat
 ```
 
 * Time intervals
@@ -1115,7 +1120,11 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 *** 
+<<<<<<< HEAD
 * Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator, result is still a list
+=======
+* Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator <U+2013> result is still a list
+>>>>>>> 26015d3712b85a02a0b80eb2317118a2d09de31d
 
 ```r
 typeof(x[1])
@@ -1125,7 +1134,11 @@ typeof(x[1])
 [1] "list"
 ```
 
+<<<<<<< HEAD
 * List elements: We retrieve list elements with the double square bracket `[[]]` operator, result is the original type
+=======
+* List elements: We retrieve list elements with the double square bracket `[[]]` operator <U+2013> result is the original type
+>>>>>>> 26015d3712b85a02a0b80eb2317118a2d09de31d
 
 ```r
 typeof(x[[1]])
@@ -1210,6 +1223,7 @@ response_parsed$results[[1]]$geometry$location
 ```r
 response_parsed$results[[1]]$rating
 ```
+<<<<<<< HEAD
 
 ```
 [1] 4.4
@@ -1237,6 +1251,9 @@ response_parsed_got <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer =
 names(response_parsed_got[[27]])
 ```
 
+=======
+Error in response_parsed$results[[1]] : subscript out of bounds
+>>>>>>> 26015d3712b85a02a0b80eb2317118a2d09de31d
 ```
  [1] "url"         "name"        "gender"      "culture"     "born"       
  [6] "died"        "titles"      "aliases"     "father"      "mother"     
