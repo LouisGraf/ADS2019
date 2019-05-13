@@ -5,7 +5,7 @@ date: 18.03.2019
 autosize: false
 width: 1920
 height: 1080
-font-family: 'Rockwell'
+font-family: 'Arial'
 css: mySlideTemplate.css
 
 
@@ -479,6 +479,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 * Splitting string on characters
 ```{r}
 x <- "Split words."
+strsplit(x," ")
 ```
 
 * String length
@@ -747,7 +748,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 
-Extending Data Frames
+Lists
 ========================================================
 
 * A list is a generic vector containing different objects.
@@ -791,7 +792,7 @@ Webservice example
 * JSON call from google API - Retrieve bars within 500 meters of Sanderring 2
 
 ```{r}
-URL <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key="
+URL <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=AIzaSyD6nZT28Pu7S29aYjjdk5IvjC8RyqNz65M"
 library(RCurl)
 library(RJSONIO)
 response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
