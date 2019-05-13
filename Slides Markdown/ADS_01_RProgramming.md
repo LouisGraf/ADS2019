@@ -1115,7 +1115,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 *** 
-* Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator – result is still a list
+* Sublists: We retrieve a sublist (or slice) with the single square bracket `[]` operator, result is still a list
 
 ```r
 typeof(x[1])
@@ -1125,7 +1125,7 @@ typeof(x[1])
 [1] "list"
 ```
 
-* List elements: We retrieve list elements with the double square bracket `[[]]` operator – result is the original type
+* List elements: We retrieve list elements with the double square bracket `[[]]` operator, result is the original type
 
 ```r
 typeof(x[[1]])
@@ -1144,7 +1144,8 @@ Webservice example
 
 
 ```r
-URL <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=AIzaSyD6nZT28Pu7S29aYjjdk5IvjC8RyqNz65M"
+key = readChar("googleAPIkey.txt", file.info("googleAPIkey.txt")$size)
+URL <- paste0("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=",key)
 library(RCurl)
 library(RJSONIO)
 response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
