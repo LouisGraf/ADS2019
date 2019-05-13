@@ -1,0 +1,555 @@
+Applied Data Science
+========================================================
+author: Data Wrangling
+date: 18.03.2019
+autosize: false
+width: 1920
+height: 1080
+font-family: 'Arial'
+css: mySlideTemplate.css
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 50px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 25px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="320">
+</div>
+</footer>
+
+
+What is Wrangling
+=================
+left: 30%
+
+Transform
+* Adding new columns
+* Combining columns
+* Splitting columns
+
+Organise
+* Moving data between columns and rows
+* Merging several dataframes
+* Sorting data by columns
+
+Aggregation
+* Aggregate data according to variables
+* Summarizing data across groups
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+![Image](figures/dplyr2.png)
+
+How is Wrangling easily done in R?
+==================================
+left: 30%
+
+Answer: `dplyr`
+Anytime you want to transform, organize, or aggregate data, use dplyr
+![Image](figures/dplyr_hex.png)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+![Image](figures/dplyr2.png)
+
+dplyr in a nutshell
+==================================
+dplyr combines
+
+* Enhanced data frame objects (`tibble`)
+* Powerful functions that manipulate data objects
+* The pipe operator `%>%` that string together objects and verbs
+
+to create a very approachable and intuitive way to data wrangling operations
+
+* dplyr is meant to be sequential and works like language: Take data trial, then do Y, then do Z, ...
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+The pipe
+--------
+
+Standard way to call a function
+```{r eval=FALSE, echo=TRUE}
+FUN(arg)
+```
+Using the pipe to call a function
+```{r eval=FALSE, echo=TRUE}
+arg %>% FUN()
+```
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+ToothGrowth$len %>% mean()
+```
+* You can call all dplyr functions directly without the pipe `%>%`
+* The advantage of the pipe `%>%` becomes evident when running multiple processing steps and we hence recommend using it throughout
+
+Organisation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`select()` |	Select specific columns
+`arrange()` |	Sort rows
+`filter()` |	Select specific rows
+
+* Keep columns with `select(COL1, COL2, ...)`
+* Remove columns with `select(-COL1, -COL2, ...)`
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=FALSE, warning=FALSE}
+head(diamonds, 2)
+
+diamonds %>%
+  select(carat, cut) %>%
+  head(2)
+
+diamonds %>% select(carat, cut) %>%
+  select(-cut) %>% head(2)
+```
+
+Organisation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`select()` |	Select specific columns
+`arrange()` |	Sort rows
+`filter()` |	Select specific rows
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+* The `arrange()` function is used to sort (aka, arrange) rows of a dataframe 
+* You can sort by as many conditions as you want 
+* To sort in descending order, use `desc()` or negated values
+
+***
+
+ 
+```{r message=FALSE, warning=FALSE}
+diamonds %>%
+  select(carat, cut) %>%
+  arrange(carat) %>%
+  head(2)
+
+diamonds %>%
+  select(carat, cut) %>%
+  arrange(-carat) %>%
+  head(2)
+```
+
+Organisation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`select()` |	Select specific columns
+`arrange()` |	Sort rows
+`filter()` |	Select specific rows
+
+* The `filter()` function is used to select specific rows 
+* For complex conditions, chain multiple logical comparison operators `(==, !=, <, >, <=, >=, &, |)`
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+
+
+***
+
+ 
+```{r message=FALSE, warning=FALSE}
+diamonds %>%
+  select(carat, cut) %>%
+  arrange(carat) %>%
+  filter(carat > 1) %>%
+  head(2)
+
+diamonds %>%
+  select(carat, cut) %>%
+  arrange(-carat) %>%
+  filter(carat <4) %>%
+  head(2)
+```
+
+
+Transformation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`rename()` |	Change column names
+`mutate()` |	Create a new column from existing columns
+`left_join()`	| Combine multiple dataframes
+
+
+* Change column names with `rename()`
+* New = Old
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=FALSE, warning=FALSE}
+diamonds %>%
+  select(carat, cut) %>%
+  head(2)
+
+diamonds %>%
+  select(carat, cut) %>%
+  rename(weight = carat) %>%
+  head(2)
+```
+
+Transformation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`rename()` |	Change column names
+`mutate()` |	Create a new column from existing columns
+`left_join()`	| Combine multiple dataframes
+
+
+* Add new columns with `mutate()`
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=FALSE, warning=FALSE}
+diamonds %>%
+  select(x, y, z, carat) %>%
+  mutate(volume = x * y * z) %>%
+  arrange(-volume) %>%
+  head(5)
+```
+
+Transformation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`rename()` |	Change column names
+`mutate()` |	Create a new column from existing columns
+`left_join()`	| Combine multiple dataframes
+
+
+* Use `left_join()` to combine data from 2 dataframes
+* If no `by` argument is specified all identically named columns are used as keys
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=FALSE, warning=FALSE}
+library(nycflights13)
+colnames(planes)
+colnames(flights)
+```
+
+Transformation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`rename()` |	Change column names
+`mutate()` |	Create a new column from existing columns
+`left_join()`	| Combine multiple dataframes
+
+
+* Use `left_join()` to combine data from 2 dataframes
+* If no `by` argument is specified all identically named columns are used as keys
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=TRUE, warning=TRUE}
+flights %>%
+  select(flight, tailnum) %>%
+  left_join(planes) %>%
+  colnames()
+
+flights %>%
+  select(flight, tailnum) %>%
+  left_join(planes, by = "tailnum") %>%
+  colnames()
+
+
+```
+
+Aggregation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`group_by()` |	Group data by levels of specific variables
+`summarise()`	| Calculate summary statistics
+
+
+
+* `group_by()` is used to annotate data with respect to underlying groups 
+* You can group by as many variables as you wish 
+* You will not see any changes to the data until you use `summarise()` 
+
+
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=TRUE, warning=TRUE}
+diamonds %>%
+  group_by(cut)
+
+
+```
+
+Aggregation Functions
+==================================
+left: 25%
+Function |	Description
+--- | ---
+`group_by()` |	Group data by levels of specific variables
+`summarise()`	| Calculate summary statistics
+
+
+
+* `summarise()` is used to summarise data from groups
+* Works similar to `mutate()` to create new variables, but with summary functions 
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+ 
+```{r message=TRUE, warning=TRUE}
+diamonds %>%
+  group_by(cut, clarity) %>%
+  summarise(meanPrice = mean(price),
+            maxPrice = max(price),
+            meanWeight = mean(carat)) %>%
+  mutate(meanPricePerCarat = meanPrice / meanWeight)
+
+```
+
+Size of the summary depends on operation
+==============================
+![Image](figures/dimension.png)
+
+Some helpful operations
+========================
+
+Summary Functions
+----------------
+
+* Vetor to Scaler
+
+Function |	action
+--- | ---
+`min()`, `max()`	 | Minimum, maximum
+`mean()`, `median()` |	Mean, Median
+`sd()` |	Standard deviation
+`sum()` |	Sum
+`n()` |	Number of cases
+
+
+* Vector to Vector
+
+Function |	action
+--- | ---
+`unique(x)` |	What are the unique values of x?
+`table(x)`	| How many are there of each unique value in x?
+`rank(x)`	| What is the rank order of values in x?
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+Data frame operations
+----------------
+
+ 
+verb |	action |	example
+--- | --- | ---
+`sample_n()` |	Select a random sample of n rows |	sample_n(10)
+`sample_frac()` |	Select a random fraction of rows |	sample_frac(.20)
+`first()`, `last()` |	Give the first (or last) observation |	first(), last()
+
+
+Programming Task
+================
+Use the `ChickWeight` dataframe
+
+* Add a column called weight_d_time that is weight divided by time
+
+* Calculate the mean weight and time for each diet.
+
+* Add a column called weight_d_time that is weight divided by time AND time_d that is time in days
+
+*  Create a new variable Diet_name which shows Diet in text format (1 is fruit, 2 is vegetables, 3 is meat, 4 is grain). The `case_when()` function is helpful for this task.
+
+* For each time period less than 10, calculate the mean weight
+
+* For each Diet, calculate the mean weight, maximum time, and the number of chicks on each diet
+
+* Give me a random sample of 10 rows from the ChickWeight dataframe, but only show me the values for Chick and weight (`sample_n`)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+```{r}
+diamonds %>%
+  select(carat) %>%
+  mutate(weight_qualitative = case_when(
+            carat > 4 ~ "YUUUUGGGE",
+            carat <= 4 ~ "LITTTTTLEE")
+  ) %>%
+  filter(carat > 3.95)
+```
+

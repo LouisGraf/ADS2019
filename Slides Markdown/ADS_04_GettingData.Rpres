@@ -1,0 +1,46 @@
+Applied Data Science
+========================================================
+author: Getting Data
+date: 18.03.2019
+autosize: false
+width: 1920
+height: 1080
+font-family: 'Arial'
+css: mySlideTemplate.css
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 50px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 25px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="320">
+</div>
+</footer>
+
+
+
+First Slide
+========================================================
+
+```{r}
+library(tabulizer)
+etf = extract_tables("https://www.ishares.com/ch/privatkunden/de/literature/fact-sheet/exx1-ishares-euro-stoxx-banks-30-15-ucits-etf-(de)-fund-fact-sheet-de-ch.pdf")
+
+```
+
+
+Slide With Code
+========================================================
+
+```{r}
+summary(cars)
+```
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```
