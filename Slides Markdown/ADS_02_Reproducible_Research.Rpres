@@ -38,6 +38,7 @@ What is Reproducible Research
     * all the steps of analysis,
     * with all the documentation to recipients (reader, editor).
 * In an ideal world even 4. the computational environment is part of the analysis!
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
@@ -149,11 +150,6 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 * Nowadays we have one starting document containing mixed text and sources which is "weaved" if needed into a result document containing the results of the executed sources.
 * Some problems arise from pictures and tables.
 
-<footer class = 'logo'>
-<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
 
 Some definitions
 ========================================================
@@ -216,11 +212,6 @@ Workflow
 * Comments are added in the form of R comments or as roxygen comments in lines starting with \#', which already are interpreted.
 * It is possible to add some header info in a specially formated header (YAML).
 
-<footer class = 'logo'>
-<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
 
 Rmarkdown
 ========================================================

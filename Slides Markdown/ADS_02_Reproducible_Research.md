@@ -1,6 +1,6 @@
 Applied Data Science
 ========================================================
-author: Statistical Programming with R
+author: Reproducible Research with R
 date: 18.03.2019
 autosize: false
 width: 1920
@@ -38,6 +38,7 @@ What is Reproducible Research
     * all the steps of analysis,
     * with all the documentation to recipients (reader, editor).
 * In an ideal world even 4. the computational environment is part of the analysis!
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
@@ -83,11 +84,7 @@ party can replay the whole analysis ang get identical results!
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
 </footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
+
 
 ***
 Obstacles for RepRes:
@@ -97,6 +94,12 @@ Obstacles for RepRes:
 * Propriatary data formats (STATA, SAS)
 * Propriatary file formats for the reports (.docx)
 * Missing attractive tool chain to change the workflow in the direction of reproducibility
+
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
 
 Replicability und Reproducibility: Two different kinds of "doing it again"
 ========================================================
@@ -108,11 +111,7 @@ Replicability und Reproducibility: Two different kinds of "doing it again"
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
 </footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
+
 
 ***
 
@@ -125,6 +124,10 @@ Typical steps in quantitative analysis
 * Presentation
 * Remember: All three steps must be reproducible! If done correctly the last two steps coincide
 
+
+
+
+
 From Literate Programming to Literate Data Analysis
 ========================================================
 * Literate Programming (1984, Donald Knuth)
@@ -136,11 +139,7 @@ to humans what we want the computer to do."
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
 </footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
+
 
 ***
 
@@ -150,6 +149,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 * When Knuth introduced the idea that kind of execution of the literate program in situ was not prepared.
 * Nowadays we have one starting document containing mixed text and sources which is "weaved" if needed into a result document containing the results of the executed sources.
 * Some problems arise from pictures and tables.
+
 
 Some definitions
 ========================================================
@@ -175,7 +175,7 @@ to be interpreted as programs.
 Prof. Dr. Christoph Flath | ADS 2019</div>
 </footer>
 <footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
 <img src = "uni-wuerzburg-logo.svg" width="160">
 </div>
 </footer>
@@ -190,18 +190,21 @@ to setup.
 
 * In that sense RStudio solves a huge problem!
 
+Concept | Description
+--- | ---
+R project | Conveniently organizes files pertaining to specific analytic projects
+R Markdown | Allows user to combine prose, code, and metadata into one file to increase reproducibility and reporting capabilities
+R Notebook | An R Markdown document that allows for independent and interactive execution of code chunks.
+
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
 Prof. Dr. Christoph Flath | ADS 2019</div>
 </footer>
-<footer class = 'logo'>
-<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
-<img src = "uni-wuerzburg-logo.svg" width="160">
-</div>
-</footer>
+
 
 ***
 Workflow
+---
 * File -> New R Script
 * File -> Compile Notebook
 * Perfect format for excercises (rpub.com).
@@ -212,12 +215,13 @@ Workflow
 
 Rmarkdown
 ========================================================
+* R Markdown allows you to turn your analyses into high quality documents, reports, presentations, and dashboards in various formats (HTML, PDF, LaTex, ePUB, etc.)
+
 * Rmarkdown is a superset of plain Markdown.
-* It was developed to have a mrakup language that was easily readable in source.
+* It was developed to have a markup language that was easily readable in source.
 * At the same time some markup should be available. (headlines, bold, italic, etc.)
 * The source of our report is a Markdown text, which contains chunks written in R.
 
-    The processing chain is text.Rmd -> knitr -> text.md -> pandoc -> html, tex, doc (-> pdflatex -> pdf)
 * pandoc extends the possibilities of pure markdown. I.e. citations are added, which are not part of pure Markdown.
 
 <footer class = 'footnote'>
@@ -230,18 +234,47 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 </div>
 </footer>
 
+***
+
+![Image](figures/markdown.jpg)
+
+Rmarkdown process
+========================================================
+* The processing chain is text.Rmd -> knitr -> text.md -> pandoc -> html, tex, doc (-> pdflatex -> pdf)
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+![Image](figures/mdprocess.jpg)
+
 Basic structure of rmarkdown document
 ========================================================
 
-Header  
-\---
-title: Reproducible Research  
-subtitle: A workflow mit R / knitr / RStudio  
-author: Someone  
-date: Somewhere, Sometime
-output: beamer_presentation:  
-toc: true
-\---
+Header
+-----
+
+`---`
+
+`title: Reproducible Research`
+
+`subtitle: A workflow mit R / knitr / RStudio`
+
+`author: Someone` 
+
+`date: Somewhere, Sometime`
+
+`output: beamer_presentation`
+
+`toc: true`
+
+`---`
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
@@ -255,13 +288,16 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 
 ***
 Some code examples
+----
 
 `A Headline!`  
 `===========`  
+
 `**bold**`  
 `*italic*`
+
 `Some subheadline`  
-`---------------------`  
+`----------------`  
 
   A formula inline in the text `$e^{i\pi} = -1$`.  
 
@@ -274,7 +310,51 @@ hist(rnorm(100))
 Even some inline calculation ist possible:  
 The iris dataframe contains `'r nrow(iris)'` observations.
 
-Evaluation of Chunks
+Cheat Sheet
+=====
+
+* Way too many options to know everything - always have a cheat sheet at hand!
+
+https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf
+
+![Image](figures/cheatsheet.jpg)
+
+Markdown Task
+=========
+
+1. Turn the line that begins with "Data" into a second level header.
+2. Change the words atmos and nasaweather into a monospaced font suitable for code snippets.
+3. Make the letter R italicized.
+4. Change "2006 ASA Data Expo" to a link that points to http://statcomputing.org/dataexpo/2006
+5. Turn the text into a bulleted list with 3 bullets: temp, pressure, ozone.
+6. Make temp, pressure, ozone bold at the start of each entry.
+7. Make K, mb, and DU italicized at the end of each entry
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath | ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+***
+
+Data
+
+The atmos data set resides in the nasaweather package of the R programming language. It contains a collection of atmospheric variables measured between 1995 and 2000 on a grid of 576 coordinates in the western hemisphere.
+
+Some of the variables in the atmos data set are:
+
+temp - The mean monthly air temperature near the surface of the Earth (measured in degrees kelvin (K))
+
+pressure - The mean monthly air pressure at the surface of the Earth (measured in millibars (mb))
+
+ozone - The mean monthly abundance of atmospheric ozone (measured in Dobson units (DU))
+
+Chunk Evaluation
 ========================================================
 
 * Normally chunks are executed one by one in the order they appear in the document, as if they constituted one long R script.
