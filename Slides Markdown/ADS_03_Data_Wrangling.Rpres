@@ -47,7 +47,7 @@ Aggregation
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -68,7 +68,7 @@ Anytime you want to transform, organize, or aggregate data, use dplyr
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -85,7 +85,7 @@ dplyr combines
 
 * Enhanced data frame objects (`tibble`)
 * Powerful functions that manipulate data objects
-* The pipe operator `%>%` that string together objects and verbs
+* The pipe operator `%>%` that strings together objects and verbs
 
 to create a very approachable and intuitive way to data wrangling operations
 
@@ -94,7 +94,7 @@ to create a very approachable and intuitive way to data wrangling operations
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -137,7 +137,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -170,7 +170,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -211,7 +211,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -256,7 +256,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -293,7 +293,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -330,7 +330,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -365,7 +365,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -411,7 +411,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -446,7 +446,7 @@ Function |	Description
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -467,7 +467,7 @@ diamonds %>%
 
 ```
 
-Size of the summary depends on operation
+Size of the function output depends on operation
 ==============================
 ![Image](figures/dimension.png)
 
@@ -499,7 +499,7 @@ Function |	action
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
@@ -540,7 +540,7 @@ Use the `ChickWeight` dataframe
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
-Prof. Dr. Christoph Flath | ADS 2019</div>
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
 </footer>
 <footer class = 'logo'>
 <div style="position: absolute; left: 1100px; bottom: 0px; z-index:100; background-color:white">
