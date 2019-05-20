@@ -20,7 +20,7 @@ Prof. Dr. Christoph Flath</div>
 </footer>
 
 
-Sources
+Sources and Extra Material
 =======
 
 https://blog.rsquaredacademy.com/web-scraping/
@@ -28,6 +28,8 @@ https://blog.rsquaredacademy.com/web-scraping/
 https://nceas.github.io/oss-lessons/data-liberation/intro-webscraping.html
 
 https://stanford.edu/~vbauer/files/teaching/VAMScrapingSlides.html
+
+http://bradleyboehmke.github.io/2015/12/scraping-html-text.html
 
 <footer class = 'footnote'>
 <div style="position: absolute; left: 0px; bottom: 0px; z-index:100; background-color:white">
@@ -298,12 +300,58 @@ Prof. Dr. Christoph Flath <br>ADS 2019</div>
 
 Selecting Nodes
 =====
-If the data is not explicitly organized as a table, we need to use formatting queues to isolate data points
-Through html_node() we can specify css selectors or xpaths to select content on a website
-Using http://selectorgadget.com/ this can be a very easy task – sometimes we need to try around
+* If the data is not explicitly organized as a table, we need to use formatting queues to isolate data points
 
+* `html_node()` and `html_node()` allow us to specify css selectors or xpaths to select content on a website
+
+* Using http://selectorgadget.com/ this can be a very easy task, sometimes we need to try around a little
+
+***
+
+```{r}
 toniErdman = "http://www.imdb.com/title/tt4048272/?ref_=nv_sr_1"
 
-toniErdman %>% 	read_html() %>%	html_nodes("#titleCast .itemprop span") %>%	html_text()
+toniErdman %>% 
+  read_html() %>%
+  html_nodes(".primary_photo+ td") %>%
+  html_text()
+```
 
 
+
+<footer class = 'footnote'>
+<div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Excursus: Cleaning strings with regular expressions
+======
+
+* Our results look promising so far
+* However, we have already encountered artifacts that we want to get rid off
+    * The population values had commas and source annotations
+    * Cast list included strange non-printable artifacts
+* Regular expressions (regex) are extremely useful in extracting information from any text by searching for one or more matches of a specific search pattern
+* In `R` we can easily leverage the `str_replace()`, `str_replace_all()`, `str_remove()` and `str_remove_all()` funcions from `stringr` to leverage regex
+
+[Regex Tutorial](Figures/RegexTutorialMedium.pdf)
+
+***
+
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
