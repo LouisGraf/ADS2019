@@ -1,0 +1,20 @@
+Applied Data Science
+========================================================
+author: Webscraping with R
+date: 18.03.2019
+autosize: false
+width: 1920
+height: 1080
+font-family: 'Arial'
+css: mySlideTemplate.css
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 50px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 25px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="320">
+</div>
+</footer>
