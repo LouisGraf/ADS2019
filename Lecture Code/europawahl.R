@@ -10,7 +10,6 @@ getRegions = function(site)
   
   tibble(region = region, url = paste0(baseURL,regionURL)) %>%
     distinct()
-  
 }
 
 getRegions("https://www.bundeswahlleiter.de/europawahlen/2019/ergebnisse.html") -> data
@@ -51,10 +50,5 @@ allDetails %>%
   left_join(data2 %>% select(-url)) %>%
   group_by(subregion) %>%
   mutate(validVotes = sum(Stimmen.2019)) %>%
-  group_by(Merkmal, subregion) %>%
-  summarise(totalVotes = sum(Stimmen.2019),
-            voteShare = totalVotes / validVotes,
-            region = region) %>%
-  filter(Merkmal == "Volt") %>%
-  arrange(-voteShare) %>%
-  print(n=391)
+  group_by(Merkmal) %>%
+  summarise(totalVotes = sum(Stimmen.2019))

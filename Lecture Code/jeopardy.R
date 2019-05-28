@@ -9,9 +9,13 @@ getEpisode= function(episode)
 {
   
   episode %>%
-    read_html()
+    read_html() %>%
+    html_nodes(".clue_text") %>%
+    html_attr("correct_response")
   
 }
+
+getEpisode("http://www.j-archive.com/showgame.php?game_id=6295")
 
 
 getFinalQuestionsByEpisode = function(episode)
