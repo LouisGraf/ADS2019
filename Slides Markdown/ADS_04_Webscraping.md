@@ -287,22 +287,22 @@ cities %>%
   read_html() %>%
   html_table(fill = TRUE, header = TRUE) %>%
   .[[2]] %>%
-  .[, c(1,2,4)] %>%
+  .[, c(1,2,5)] %>%
   head(10)
 ```
 
 ```
-        City     Nation        Population
-1                             City proper
-2  Chongqing      China     30,751,600[8]
-3   Shanghai      China    24,256,800[11]
-4    Beijing      China    21,516,000[13]
-5      Lagos    Nigeria     16,060,303[c]
-6      Dhaka Bangladesh     8,906,039[18]
-7     Mumbai      India    12,478,447[20]
-8    Chengdu      China    16,044,700[22]
-9    Karachi   Pakistan 14,910,352[24][d]
-10 Guangzhou      China    14,043,500[28]
+        City     Nation                  Population
+1                                 Metropolitan area
+2  Chongqing      China               17,000,000[9]
+3   Shanghai      China              24,750,000[12]
+4    Beijing      China              24,900,000[14]
+5      Lagos    Nigeria              21,000,000[17]
+6      Dhaka Bangladesh              20,000,000[19]
+7     Mumbai      India                  12,771,200
+8    Chengdu      China 10,376,000[citation needed]
+9    Karachi   Pakistan                            
+10 Guangzhou      China              25,000,000[29]
 ```
 
 
@@ -377,6 +377,8 @@ Prof. Dr. Christoph Flath <br>ADS 2019</div>
 
 Excursus: Cleaning strings with regular expressions
 ======
+left: 35%
+
 
 * Our results look promising so far
 * However, we have already encountered artifacts that we want to get rid off
@@ -385,12 +387,196 @@ Excursus: Cleaning strings with regular expressions
 * Regular expressions (regex) are extremely useful in extracting information from any text by searching for one or more matches of a specific search pattern
 * In `R` we can easily leverage the `str_replace()`, `str_replace_all()`, `str_remove()` and `str_remove_all()` funcions from `stringr` to leverage regex
 
-[Regex Tutorial](Figures/RegexTutorialMedium.pdf)
+https://github.com/NikoStein/ADS19/raw/master/Cheatsheets/RegexTutorialMedium.pdf
 
 ***
 
 
+```r
+toniErdman %>% 
+  read_html() %>%
+  html_nodes(".primary_photo+ td") %>%
+  html_text() %>%
+  .[1] -> sample
 
+sample
+```
+
+```
+[1] "\n Sandra Hüller\n          "
+```
+
+```r
+sample %>%
+  str_remove_all("\\n") %>% #\n
+  str_remove_all("[ \t]+$") %>% #trailing whitespace
+  str_remove_all("^[ \t]") #leading whitespace
+```
+
+```
+[1] "Sandra Hüller"
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Excursus: Cleaning strings with regular expressions (2)
+======
+left: 35%
+
+
+* Our results look promising so far
+* However, we have already encountered artifacts that we want to get rid off
+    * The population values had commas and source annotations
+    * Cast list included strange non-printable artifacts
+* Regular expressions (regex) are extremely useful in extracting information from any text by searching for one or more matches of a specific search pattern
+* In `R` we can easily leverage the `str_replace()`, `str_replace_all()`, `str_remove()` and `str_remove_all()` funcions from `stringr` to leverage regex
+
+https://github.com/NikoStein/ADS19/raw/master/Cheatsheets/RegexTutorialMedium.pdf
+
+***
+
+
+```r
+cities %>%
+  read_html() %>%
+  html_table(fill = TRUE, header = TRUE) %>%
+  .[[2]] %>%
+  .[3, c(1,2,4)] -> sample
+
+sample
+```
+
+```
+      City Nation     Population
+3 Shanghai  China 24,256,800[11]
+```
+
+```r
+sample[3] %>%
+  str_remove_all(",") %>% # remove commas
+  str_remove_all("\\[[\\d]*\\]") %>% # remove arbitrary number of digits enclosed by square brackets 
+as.numeric() #turn into number
+```
+
+```
+[1] 24256800
+```
+
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+
+Programming Task
+=====
+
+* Jeopardy! is a famous trivia show which has been running in the US for over thirty years
+* All past episodes have been archived at http://www.j-archive.com/ and can be retrieved for practice or analysis
+* Retrieve all questions for an episode of your choice
+* Create a function that takes one argument - a string URL for the episode and return the final Jeopardy question
+
+<footer class = 'footnote'>
+<div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>
+
+Subpage Navigation
+=====
+left: 35%
+
+
+* Very often we have an overview site and then want to crawl all children sites
+
+* Three step approach:
+    * Retrieve the list of sub URLs using the techniques described before
+    * Write a function which given an URL retrieves the relevant data from the subpage
+    * Use `map` to execute the retrieval function on each of the URLs extracted in step 1
+    
+***
+    
+
+```r
+overview = "http://www.j-archive.com/showseason.php?season=35"
+overview %>%
+  read_html() %>%
+  html_nodes("td:nth-child(1) a") %>%
+  html_attr("href") -> allURLs
+head(allURLs,3)
+```
+
+```
+[1] "http://www.j-archive.com/showgame.php?game_id=6289"
+[2] "http://www.j-archive.com/showgame.php?game_id=6288"
+[3] "http://www.j-archive.com/showgame.php?game_id=6287"
+```
+
+```r
+getTitleOfEpisode = function(url){
+  url %>% 
+    read_html() %>% 
+    html_node("h1") %>%
+    html_text()}
+map_chr(head(allURLs), getTitleOfEpisode)
+```
+
+```
+[1] "Show #7996 - Monday, May 20, 2019"   
+[2] "Show #7995 - Friday, May 17, 2019"   
+[3] "Show #7994 - Thursday, May 16, 2019" 
+[4] "Show #7993 - Wednesday, May 15, 2019"
+[5] "Show #7992 - Tuesday, May 14, 2019"  
+[6] "Show #7991 - Monday, May 13, 2019"   
+```
+    
+
+    
+<footer class = 'footnote'>
+<div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath <br>ADS 2019</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; right: 0px; bottom: 0px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="160">
+</div>
+</footer>    
+    
+Programming Task
+=====
+
+* Create an rvest script that retrieves all players from a transfermarkt.de team website
+e.g., http://www.transfermarkt.de/fc-bayern-munchen/startseite/verein/27/saison_id/2018 
+
+* Transform the script to a function that takes the entry point as a string argument
+
+* Retrieve all the urls from the overview site:
+http://www.transfermarkt.de/1-bundesliga/startseite/wettbewerb/L1/saison_id/2018 
+
+* Use a `map` function to retrieve all players from all clubs
+
+* Extra effort: create a function to retrieve a player's relevant details (you may want to focus on age, games played, market value and primary position) and include it accordingly in your workflow 
 
 <footer class = 'footnote'>
 <div style="position: absolute; right: 250px; bottom: 0px; z-index:100; background-color:white">

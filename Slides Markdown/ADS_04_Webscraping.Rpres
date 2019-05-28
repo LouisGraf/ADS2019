@@ -273,7 +273,7 @@ cities %>%
   read_html() %>%
   html_table(fill = TRUE, header = TRUE) %>%
   .[[2]] %>%
-  .[, c(1,2,4)] %>%
+  .[, c(1,2,5)] %>%
   head(10)
 
 ```
