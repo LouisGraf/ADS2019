@@ -170,14 +170,45 @@ geocode$results$geometry$location
     * https://developers.google.com/maps/documentation/geocoding/intro?hl=en#GeocodingRequests
 
 
+Example: New York Times Article Search
+====
+
+```{r}
+article_key <- "xOugxCQmnxAEYsq4BUvbjMGsyR4jZJoB"	#(http://developer.nytimes.com/signup)
+url <- "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=donald+trump&api-key="
+req <- fromJSON(paste0(url, article_key))
+
+summary(req)
+summary(req$response)
+
+articles <- req$response$docs
+articles
+```
+
+
+API Wrappers: Example `twitteR`
+=====
+
+* Handling complicated API can become cumbersome
+* For popular services you will often find helpful R packages which wrap the API calls:
+
+```{r}
+library(twitteR)
+setup_twitter_oauth("4i279GI78ZfwlHAS2y46yg", "CtDKMx6xtJrFfBDkZOR84Y0ykpyTUtzSWV3AhjTZ0",
+                    access_token="75859439-Z7odVPsmikATY23MjKatfXjT5JwNwNQYZU7YVKN4r",
+                    access_secret="NMYZ3EYHQmCAeSAXA7Sl1Jo1L03EMUWASrBZXnDp0")
+#https://dev.twitter.com/rest/public/search
+searchTwitter("from:realdonaldtrump", n=50, lang="en", since = "2018-01-04")
+```
+
 Programming Task
 =====
 
 The following API call gives you gasoline prices for a latitude / longitude pair and a 1.5km radius
 
 ```
-lat = "xxx"
-lng = "xxx""
+lat = "49.8"
+lng = "9.9""
 url=paste0("https://creativecommons.tankerkoenig.de/json/list.php?lat=",lat,"&lng=",lng,"&rad=1.5&sort=dist&type=all&apikey=e23dc02b-8d60-a1b2-0c83-be6e179ac545")
 req <- fromJSON(url)
 ```
