@@ -1,3 +1,6 @@
+library(tidyverse)
+library(rvest)
+
 getRegions = function(site)
 {
   baseURL = "https://www.bundeswahlleiter.de/europawahlen/2019/"
@@ -50,5 +53,27 @@ allDetails %>%
   left_join(data2 %>% select(-url)) %>%
   group_by(subregion) %>%
   mutate(validVotes = sum(Stimmen.2019)) %>%
-  group_by(Merkmal) %>%
-  summarise(totalVotes = sum(Stimmen.2019))
+  group_by(Merkmal, subregion, region) %>%
+  summarise(totalVotes = sum(Stimmen.2019),
+            share = totalVotes / validVotes) %>%
+  select(share, Merkmal, subregion, region) %>%
+  spread(Merkmal, share) %>%
+  filter(region=="Bayern") %>%
+  ggplot(aes(x=CSU, y=GRÜNE)) + geom_point()
+
+allDetails %>%
+  left_join(data2 %>% select(-url)) %>%
+  select(region, subregion, Stimmen.2019, Stimmen.2014, Merkmal) %>%
+  gather(Jahr,Stimmen,-region,-subregion,-Merkmal) %>%
+  mutate(Jahr = substring(Jahr, 9, 13)) %>%
+  group_by(Merkmal, Jahr) %>%
+  summarise(totalVotes = sum(Stimmen)) %>%
+  group_by(Jahr) %>%
+  mutate(share = totalVotes/sum(totalVotes)) %>%
+  arrange(-share) %>%
+  mutate(Merkmal = factor(Merkmal, levels = unique(Merkmal))) %>%
+  filter(share >= 0.006) %>%
+  ggplot(aes(x=Jahr, y=share, fill=Merkmal)) + geom_col(position="dodge") + facet_grid(.~Merkmal)
+  
+  
+  
