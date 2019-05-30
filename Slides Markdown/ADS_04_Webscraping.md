@@ -294,15 +294,15 @@ cities %>%
 ```
         City     Nation                  Population
 1                                 Metropolitan area
-2  Chongqing      China               17,000,000[9]
-3   Shanghai      China              24,750,000[12]
-4    Beijing      China              24,900,000[14]
-5      Lagos    Nigeria              21,000,000[17]
-6      Dhaka Bangladesh              20,000,000[19]
-7     Mumbai      India                  12,771,200
-8    Chengdu      China 10,376,000[citation needed]
-9    Karachi   Pakistan                            
-10 Guangzhou      China              25,000,000[29]
+2   Shanghai      China               24,750,000[9]
+3    Beijing      China              24,900,000[11]
+4      Lagos    Nigeria              21,000,000[14]
+5      Dhaka Bangladesh              20,000,000[16]
+6     Mumbai      India                  12,771,200
+7    Chengdu      China 10,376,000[citation needed]
+8    Karachi   Pakistan                            
+9  Guangzhou      China              25,000,000[26]
+10  Istanbul     Turkey                  13,520,000
 ```
 
 
@@ -346,11 +346,11 @@ toniErdman %>%
 ```
 
 ```
- [1] "\n Sandra Hüller\n          "         
+ [1] "\n Sandra H<U+00FC>ller\n          "  
  [2] "\n Peter Simonischek\n          "     
  [3] "\n Michael Wittenborn\n          "    
  [4] "\n Thomas Loibl\n          "          
- [5] "\n Trystan Pütter\n          "        
+ [5] "\n Trystan P<U+00FC>tter\n          " 
  [6] "\n Ingrid Bisu\n          "           
  [7] "\n Hadewych Minis\n          "        
  [8] "\n Lucy Russell\n          "          
@@ -358,7 +358,7 @@ toniErdman %>%
 [10] "\n Alexandru Papadopol\n          "   
 [11] "\n Victoria Malektorovych\n          "
 [12] "\n Ingrid Burkhard\n          "       
-[13] "\n Jürg Löw\n          "              
+[13] "\n J<U+00FC>rg L<U+00F6>w\n          "
 [14] "\n Ruth Reinecke\n          "         
 [15] "\n Nicolas Wackerbarth\n          "   
 ```
@@ -403,7 +403,7 @@ sample
 ```
 
 ```
-[1] "\n Sandra Hüller\n          "
+[1] "\n Sandra H<U+00FC>ller\n          "
 ```
 
 ```r
@@ -414,7 +414,7 @@ sample %>%
 ```
 
 ```
-[1] "Sandra Hüller"
+[1] "Sandra H<U+00FC>ller"
 ```
 
 
@@ -457,8 +457,8 @@ sample
 ```
 
 ```
-      City Nation     Population
-3 Shanghai  China 24,256,800[11]
+     City Nation     Population
+3 Beijing  China 21,516,000[10]
 ```
 
 ```r
@@ -469,7 +469,7 @@ as.numeric() #turn into number
 ```
 
 ```
-[1] 24256800
+[1] 21516000
 ```
 
 
@@ -528,9 +528,9 @@ head(allURLs,3)
 ```
 
 ```
-[1] "http://www.j-archive.com/showgame.php?game_id=6289"
-[2] "http://www.j-archive.com/showgame.php?game_id=6288"
-[3] "http://www.j-archive.com/showgame.php?game_id=6287"
+[1] "http://www.j-archive.com/showgame.php?game_id=6300"
+[2] "http://www.j-archive.com/showgame.php?game_id=6297"
+[3] "http://www.j-archive.com/showgame.php?game_id=6295"
 ```
 
 ```r
@@ -543,12 +543,12 @@ map_chr(head(allURLs), getTitleOfEpisode)
 ```
 
 ```
-[1] "Show #7996 - Monday, May 20, 2019"   
-[2] "Show #7995 - Friday, May 17, 2019"   
-[3] "Show #7994 - Thursday, May 16, 2019" 
-[4] "Show #7993 - Wednesday, May 15, 2019"
-[5] "Show #7992 - Tuesday, May 14, 2019"  
-[6] "Show #7991 - Monday, May 13, 2019"   
+[1] "Show #8003 - Wednesday, May 29, 2019"
+[2] "Show #8002 - Tuesday, May 28, 2019"  
+[3] "Show #8001 - Monday, May 27, 2019"   
+[4] "Show #8000 - Friday, May 24, 2019"   
+[5] "Show #7999 - Thursday, May 23, 2019" 
+[6] "Show #7998 - Wednesday, May 22, 2019"
 ```
     
 
