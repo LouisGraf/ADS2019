@@ -1,0 +1,219 @@
+Applied Data Science
+========================================================
+author: Getting Data from APIs
+date: 18.03.2019
+autosize: false
+width: 1920
+height: 1080
+font-family: 'Arial'
+css: mySlideTemplate.css
+
+
+<footer class = 'footnote'>
+<div style="position: absolute; left: 0px; bottom: 50px; z-index:100; background-color:white">
+Prof. Dr. Christoph Flath</div>
+</footer>
+<footer class = 'logo'>
+<div style="position: absolute; left: 1100px; bottom: 25px; z-index:100; background-color:white">
+<img src = "uni-wuerzburg-logo.svg" width="320">
+</div>
+</footer>
+
+
+Introduction to REST
+====
+
+* REST stands for Representational State Transfer
+* It is an architectural pattern for developing web services as opposed to a specification
+* REST web services communicate over the HTTP specification, using HTTP vocabulary:
+    * Methods (GET, POST, etc.)
+    * HTTP URI syntax (paths, parameters, etc.)
+    * Media types (xml, json, html, plain text, etc)
+    * HTTP Response codes
+
+***
+
+* Representational
+    * Clients possess the information necessary to identify, modify, and/or delete a web resource
+
+* State
+    * All resource state information is stored on the client
+
+* Transfer
+    * Client state is passed from the client to the service through HTTP
+
+
+HTTP-REST process
+=====
+
+HTTP request is sent from the client
+
+* Identifies the location of a *resource*
+* Specifies the *verb*, or HTTP *method* to use when accessing the resource
+* Supplies optional *request headers* (name-value pairs) that provide additional information the server may need when processing the request
+* Supplies an optional *request body* that identifies additional data to be uploaded to the server (e.g. form parameters, attachments, etc.)
+
+***
+
+HTTP response is sent from the server
+
+* Gives the *status* of the processed request
+* Supplies *response headers* (name-value pairs) that provide additional information about the response
+* Supplies an optional *response body* that identifies additional data to be downloaded to the client (html, xml, binary data, etc.)
+
+
+JavaScript Object Notation (JSON)
+====
+
+
+* A lightweight data-interchange format
+
+* A subset of the object literal notation of JavaScript (or ECMA-262).
+
+* A JSON string must be enclosed by double quotes.
+
+* See http://json.org/ for the detailed syntax of JSON.
+
+***
+
+Benefits
+
+* Easy to parse and generate
+* Maps to native types in most languages
+* Standardized and Unicode based
+* Supported by all browsers
+
+Two basic structures in JSON
+====
+
+A collection of name/value pairs. 
+    * In various languages, this is realized as an object, record, struct, dictionary, hash table, keyed list, or associative array.
+    * e.g.: An object with three properties named "a", "b", and "c"
+    
+`{ "a":1,"b":2,"c":3 }`
+    
+***
+    
+An ordered list of values. 
+*  In most languages, this is realized as an array, vector, list, or sequence.
+* e.g.: An array of three integers and one string value
+
+`[ 1, 2, 3, "value #4 with" ]`
+
+
+Example: An address book encoded in JSON
+====
+
+```
+{
+   "fullname": "Sean Kelly",
+   "org": "SK Consulting",
+   "emailaddrs": [
+      {"type": "work", "value": "kelly@seankelly.biz"},
+      {"type": "home", "pref": 1, "value": "kelly@seankelly.tv"}
+   ],
+    "telephones": [
+      {"type": "work", "pref": 1, "value": "+1 214 555 1212"},
+      {"type": "fax", "value": "+1 214 555 1213"},
+      {"type": "mobile", "value": "+1 214 555 1214"}
+   ],
+   "addresses": [
+      {"type": "work", "format": "us",
+       "value": "1234 Main StnSpringfield, TX 78080-1216"},
+      {"type": "home", "format": "us",
+       "value": "5678 Main StnSpringfield, TX 78080-1316"}
+   ],
+    "urls": [
+      {"type": "work", "value": "http://seankelly.biz/"},
+      {"type": "home", "value": "http://seankelly.tv/"}
+   ]
+}
+```
+
+`jsonlite` in R
+====
+
+* The `jsonlite` Package offers "a practical and consistent mapping between JSON data and R objects"
+* It is a JSON parser/generator optimized for the web
+* Its main strength is that it implements a bidirectional mapping between JSON data and the most important R data types. Thereby we can convert between R objects and JSON without loss of type or information, and without the need for any manual data munging
+* This is ideal for interacting with web APIs, or to build pipelines where data structures seamlessly flow in and out of R using JSON
+
+***
+
+JSON Structure | JSON data | R class
+--- | --- | ---
+Array of primitives | `["Amsterdam", "Rotterdam", "Utrecht", "Den Haag"]` | Vector
+Array of objects | `[{"name":"Erik", "age":43}, {"name":"Anna", "age":32}]` | DataFrame
+Array of arrays | `[ [1, 2, 3], [4, 5, 6] ]` | Matrix
+
+Example: Geocoding with google maps
+====
+> Geocoding is the process of converting addresses (like "1600 Amphitheatre Parkway, Mountain View, CA") into geographic coordinates (like latitude 37.423021 and longitude -122.083739), which you can use to place markers on a map, or position the map.
+
+```{r}
+library(jsonlite)
+key = readChar("googleAPIkey.txt", file.info("googleAPIkey.txt")$size)
+
+url = "https://maps.googleapis.com/maps/api/geocode/json?address="
+
+address = "'1600+Amphitheatre+Parkway,+Mountain+View,+CA'"
+
+geocode = fromJSON(paste0(url,address,"&key=",key))
+geocode$results$geometry$location
+
+```
+***
+
+* A Google Maps Geocoding API request takes the following form: `https://maps.googleapis.com/maps/api/geocode/outputFormat?parameters`
+    * where outputFormat may be either of the following values:
+         * json (recommended) indicates output in JavaScript Object Notation (JSON); or xml indicates output in XML
+    * https://developers.google.com/maps/documentation/geocoding/intro?hl=en#GeocodingRequests
+
+
+Example: New York Times Article Search
+====
+
+```{r}
+article_key <- "xOugxCQmnxAEYsq4BUvbjMGsyR4jZJoB"	#(http://developer.nytimes.com/signup)
+url <- "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=donald+trump&api-key="
+req <- fromJSON(paste0(url, article_key))
+
+summary(req)
+summary(req$response)
+
+articles <- req$response$docs
+articles
+```
+
+
+API Wrappers: Example `twitteR`
+=====
+
+* Handling complicated API can become cumbersome
+* For popular services you will often find helpful R packages which wrap the API calls:
+
+```{r}
+library(twitteR)
+setup_twitter_oauth("4i279GI78ZfwlHAS2y46yg", "CtDKMx6xtJrFfBDkZOR84Y0ykpyTUtzSWV3AhjTZ0",
+                    access_token="75859439-Z7odVPsmikATY23MjKatfXjT5JwNwNQYZU7YVKN4r",
+                    access_secret="NMYZ3EYHQmCAeSAXA7Sl1Jo1L03EMUWASrBZXnDp0")
+#https://dev.twitter.com/rest/public/search
+searchTwitter("from:realdonaldtrump", n=50, lang="en", since = "2018-01-04")
+```
+
+Programming Task
+=====
+
+The following API call gives you gasoline prices for a latitude / longitude pair and a 1.5km radius
+
+```
+lat = "49.8"
+lng = "9.9""
+url=paste0("https://creativecommons.tankerkoenig.de/json/list.php?lat=",lat,"&lng=",lng,"&rad=1.5&sort=dist&type=all&apikey=e23dc02b-8d60-a1b2-0c83-be6e179ac545")
+req <- fromJSON(url)
+```
+
+
+
+
+Write a function that takes a Location as argument which is then translated to coordinates and subsequently obtains the gasoline prices around these coordinates
