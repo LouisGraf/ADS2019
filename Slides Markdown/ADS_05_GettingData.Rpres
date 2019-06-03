@@ -209,7 +209,7 @@ The following API call gives you gasoline prices for a latitude / longitude pair
 ```
 lat = "49.8"
 lng = "9.9""
-url=paste0("https://creativecommons.tankerkoenig.de/json/list.php?lat=",lat,"&lng=",lng,"&rad=1.5&sort=dist&type=all&apikey=e23dc02b-8d60-a1b2-0c83-be6e179ac545")
+url=paste0("https://creativecommons.tankerkoenig.de/json/list.php?lat=49.8&lng=9.9&rad=1.5&sort=dist&type=all&apikey=e23dc02b-8d60-a1b2-0c83-be6e179ac545")
 req <- fromJSON(url)
 ```
 
