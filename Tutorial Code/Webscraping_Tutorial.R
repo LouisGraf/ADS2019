@@ -56,7 +56,3 @@ getNews = function(node){
 test = getNews(nodes[50])
 
 news = map_df(nodes, getNews)
-
-
-read_html('https://www.tipico.de/spring/update?_=/program/eventstakeratio%253FeventId%253D241886010') %>%
-  html_nodes('*')
