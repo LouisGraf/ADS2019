@@ -14,12 +14,25 @@ response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L)
 # Verschachtelte Listen...
 # Your code
 
+response_parsed$items[[1]]$volumeInfo$title
+response_parsed$items[[1]]$volumeInfo$authors
+
+getTitle = function(item) {
+  title = item$volumeInfo$title
+  return(title)
+}
+
+map_chr(response_parsed$items, getTitle)
+
+
+
 #b)
 map_chr(response_parsed$items, function(x) x$volumeInfo$title)
 map_chr(response_parsed$items, function(x) x$volumeInfo$publishedDate)
 map_chr(response_parsed$items, function(x) x$volumeInfo$maturityRating)
 
 #or
+
 
 getBookData = function(item){
   title = item$volumeInfo$title
@@ -29,7 +42,7 @@ getBookData = function(item){
   book = data.frame(title, published, rating, author)
 }
 
-test = getBookData(response_parsed$items[[1]])
+test = getBookData(response_parsed$items[[3]])
 
 books = map_df(response_parsed$items, getBookData)
 

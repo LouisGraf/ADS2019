@@ -5,6 +5,7 @@ library(tidyverse)
 carData = mtcars
 carData$car = row.names(carData)
 
+
 #a)
 createAd <- function(vehicleData){
   vehicleData %>%
@@ -18,6 +19,7 @@ createAd <- function(vehicleData){
 }
 
 createAd(carData)
+
 
 #b)
 createFormattedAd <- function(vehicleData){
