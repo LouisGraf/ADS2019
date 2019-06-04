@@ -11,7 +11,7 @@ response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L)
 
 
 #a)
-# Verschachtelte Liste...
+# Verschachtelte Listen...
 # Your code
 
 #b)
