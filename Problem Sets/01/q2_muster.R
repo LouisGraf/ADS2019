@@ -3,7 +3,7 @@
 
 # Name: Your Name
 # Matrikelnummer: Your matriculation number
-
+library(tidyverse)
 library(RCurl)
 library(RJSONIO)
 URL = "https://www.googleapis.com/books/v1/volumes?q=george+r+r+martin&maxResults=40"
@@ -15,7 +15,7 @@ response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L)
 # Your code
 
 response_parsed$items[[1]]$volumeInfo$title
-response_parsed$items[[1]]$volumeInfo$authors
+paste(response_parsed$items[[1]]$volumeInfo$authors, collapse = ', ')
 
 getTitle = function(item) {
   title = item$volumeInfo$title
@@ -30,16 +30,17 @@ map_chr(response_parsed$items, getTitle)
 map_chr(response_parsed$items, function(x) x$volumeInfo$title)
 map_chr(response_parsed$items, function(x) x$volumeInfo$publishedDate)
 map_chr(response_parsed$items, function(x) x$volumeInfo$maturityRating)
+map_chr(response_parsed$items, function(x) paste(x$volumeInfo$authors, collapse ='; '))
 
 #or
 
 
 getBookData = function(item){
   title = item$volumeInfo$title
-  author = item$volumeInfo$author
+  authors = paste(item$volumeInfo$authors, collapse = '; ')
   published = item$volumeInfo$publishedDate
   rating = item$volumeInfo$maturityRating
-  book = data.frame(title, published, rating, author)
+  book = data.frame(title, published, rating, authors)
 }
 
 test = getBookData(response_parsed$items[[3]])
