@@ -2,7 +2,7 @@
 # Question 1
 
 # Name: Louis Graf
-# Matrikelnummer: Your matriculation number
+# Matrikelnummer: 2389931
 
 require(tidyverse)
 require(rvest)
@@ -35,65 +35,81 @@ getQuotes <- function(link){
   return(frame)
 }
 
-getQuotes(url)
+testa <- getQuotes(url)
 
 
-#b)
+#b) ----------------------------------------------------------------------
 
-getAllPages <- function(link){
-  links <<- c(links, link)
-  
-  read_html(link) %>%
-    html_nodes('.next a') %>%
-    html_attr('href') -> linknext
-  
-  if(length(linknext) > 0){
-    getAllPages(paste(url,linknext,sep=""))
-    }else{
-      return(links)
-  }
-}
-
-
-
-
-getAllQuotes <- function(links){
+getAllQuotes <- function(link){
   allQuotes = data.frame()
   allLinks = list()
-  allLinks = getAllPages(url)
-
+  links = list()
+  
+  getAllPages <- function(link){
+    links <<- c(links, link)
+    
+    read_html(link) %>%
+      html_nodes('.next a') %>%
+      html_attr('href') -> linknext
+    
+    if(length(linknext) > 0){
+      getAllPages(paste0(url,linknext,sep=""))
+    }else{
+      return(links)
+    }
+  }
+  
+  allLinks = getAllPages(link)
+  
   allQuotes <- map_df(allLinks,getQuotes)
-  print(nrow(allQuotes))
   return(allQuotes)
 }
 
-quotes <- getAllQuotes(allLinks)
-quotes
+testb <- getAllQuotes(url)
+testb
 
 
-#c) 
+#c) ------------------------------------------------------------------------------- 
+
 
 getAuthorUrls <- function(link){
-  
-  read_html(link) %>%
-    html_nodes(".quote span a") %>%
-    html_attr("href") -> urls
-  
-  urls = paste(url, urls,sep="")
-
-  return(urls)
-}
-
-getAuthorUrls <- function(firstPage){
   allLinks = list()
-  allLinks = getAllPages(firstPage)
+  links = list()
+  
+    getAllPages <- function(link){
+      links <<- c(links, link)
+      
+      read_html(link) %>%
+        html_nodes('.next a') %>%
+        html_attr('href') -> linknext
+      
+      if(length(linknext) > 0){
+        getAllPages(paste0(url,linknext,sep=""))
+      }else{
+        return(links)
+      }
+    }
+    
+    allLinks = getAllPages(link)
+    
+    getAuthors <- function(alink){
+      
+      read_html(alink) %>%
+        html_nodes(".quote span a") %>%
+        html_attr("href") -> urls
+      
+      urls = paste(url, urls,sep="")
+      
+      return(urls)
+    }
   
   allAuthors = sapply(allLinks,getAuthors)
   
   allAuthors <- unique(as.list(allAuthors), incomparables = FALSE)
+  allAuthors <- unlist(allAuthors)
 }
 
-#test1 <- getAuthorUrls(url)
+testc <- getAuthorUrls(url)
 
 #d) 
 
@@ -116,14 +132,55 @@ getDetails <- function(authorUrl){
   frame = data.frame(author, description, bornDate)
   return(frame)
 }
-test2 = getDetails(aurl)
+testd = getDetails(aurl)
+
+allAuthorDetails = map_df(getAuthorUrls(url),getDetails)
 
 
-#e)
+#e) ------------------------------------------------------
 #i)
-authorDetails %>%
-  select(bornDate) %>%
-  mutate(year = lubridate::year(bornDate), 
-         month = lubridate::month(bornDate), 
-         day = lubridate::day(bornDate))
+allAuthorDetails$bornDate <- parse_date_time(allAuthorDetails$bornDate, orders = "mdy")
+allQuotes = getAllQuotes(url)
 
+allAuthorDetails %>%
+  mutate(day = day(bornDate),
+         month = month(bornDate),
+         year = year(bornDate)) -> newAuthorDetails
+
+newAuthorDetails %>%
+  select(year) %>%
+  filter(year < 1900 && year > 1799) %>%
+  summarise(n = n()) 
+#Lösung: 50 Stück 
+
+
+#ii)
+#1)
+allQuotes %>% 
+  select(author,quotes)%>%
+  group_by(author) %>%
+  count(author) %>%
+  arrange(desc(n))%>%
+  head(1)#Albert Einstein
+
+#2)
+allQuotes %>%
+  mutate(count = 1) %>%
+  group_by(author) %>%
+  summarise(QuotesByAuthor = sum(count)) %>%
+  arrange(-QuotesByAuthor) -> QuotesByAuthor
+
+QuotesByAuthor %>%
+  summarise(Avg = mean(QuotesByAuthor))
+
+#3)
+
+allQuotes %>%
+  filter(str_detect(tags,'life')) %>%
+  select(author, quotes)
+
+#iii)
+
+newAuthorDetails = allAuthorDetails
+newAuthorDetails$author = trimws(newAuthorDetails$author, which = c("both", "left", "right"), whitespace = "[ \t\r\n]")
+CombinedDataFrames = merge(x=newAuthorDetails, y=allQuotes, by="author")
