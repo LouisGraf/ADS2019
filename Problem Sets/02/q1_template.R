@@ -8,9 +8,9 @@ require(tidyverse)
 require(rvest)
 require(lubridate)
 
-url = "http://quotes.toscrape.com"
+url = "http://quotes.toscrape.com" #Baseurl
 aurl = "http://quotes.toscrape.com/author/J-K-Rowling/" #Test Url für Autoren
-links = list()
+
 #a) 
 getQuotes <- function(link){
   
@@ -35,7 +35,7 @@ getQuotes <- function(link){
   return(frame)
 }
 
-testa <- getQuotes(url)
+test_a <- getQuotes(url)
 
 
 #b) ----------------------------------------------------------------------
@@ -65,8 +65,8 @@ getAllQuotes <- function(link){
   return(allQuotes)
 }
 
-testb <- getAllQuotes(url)
-testb
+test_b <- getAllQuotes(url)
+
 
 
 #c) ------------------------------------------------------------------------------- 
@@ -109,7 +109,7 @@ getAuthorUrls <- function(link){
   allAuthors <- unlist(allAuthors)
 }
 
-testc <- getAuthorUrls(url)
+test_c <- getAuthorUrls(url)
 
 #d) 
 
@@ -132,13 +132,15 @@ getDetails <- function(authorUrl){
   frame = data.frame(author, description, bornDate)
   return(frame)
 }
-testd = getDetails(aurl)
+test_d_getAuthorDetails = getDetails(aurl)
 
 allAuthorDetails = map_df(getAuthorUrls(url),getDetails)
 
 
+
 #e) ------------------------------------------------------
-#i)
+#i)  Transform the data frame to store the information on the day, month and year in distinct columns
+
 allAuthorDetails$bornDate <- parse_date_time(allAuthorDetails$bornDate, orders = "mdy")
 allQuotes = getAllQuotes(url)
 
@@ -147,23 +149,25 @@ allAuthorDetails %>%
          month = month(bornDate),
          year = year(bornDate)) -> newAuthorDetails
 
+#How many authors where born in the 19th century (1800-1899)?
+
 newAuthorDetails %>%
   select(year) %>%
   filter(year < 1900 && year > 1799) %>%
   summarise(n = n()) 
-#Lösung: 50 Stück 
+#Lösung: 50
 
 
-#ii)
-#1)
+#ii) Transform and summarize the quotes data 
+#1) -------- Which author has the most quotes on the website?
 allQuotes %>% 
   select(author,quotes)%>%
   group_by(author) %>%
   count(author) %>%
   arrange(desc(n))%>%
-  head(1)#Albert Einstein
+  head(1) #Albert Einstein
 
-#2)
+#2) -------- How many quotes does an author have on average?
 allQuotes %>%
   mutate(count = 1) %>%
   group_by(author) %>%
@@ -173,13 +177,13 @@ allQuotes %>%
 QuotesByAuthor %>%
   summarise(Avg = mean(QuotesByAuthor))
 
-#3)
+#3) --------- Find all quotes that use the tag “life"
 
 allQuotes %>%
   filter(str_detect(tags,'life')) %>%
   select(author, quotes)
 
-#iii)
+#iii) -------- Join both data frames (you may need to transform keys first) 
 
 newAuthorDetails = allAuthorDetails
 newAuthorDetails$author = trimws(newAuthorDetails$author, which = c("both", "left", "right"), whitespace = "[ \t\r\n]")
