@@ -9,12 +9,11 @@ require(rvest)
 require(lubridate)
 
 url = "http://quotes.toscrape.com" #Baseurl
-aurl = "http://quotes.toscrape.com/author/J-K-Rowling/" #Test Url für Autoren
-
+aurl = "http://quotes.toscrape.com/author/J-K-Rowling/" #Test Autoren-Url
 #a) 
 getQuotes <- function(link){
   
-  read_html(link) -> nodes
+  read_html(link) -> nodes 
   
   nodes %>%
     html_nodes(".quote") -> nodes
@@ -41,27 +40,27 @@ test_a <- getQuotes(url)
 #b) ----------------------------------------------------------------------
 
 getAllQuotes <- function(link){
-  allQuotes = data.frame()
-  allLinks = list()
-  links = list()
+  allQuotes = data.frame() #initiiert Dataframe
+  allLinks = list() #initiiert Liste um Links zu sammeln
+  links = list() # ^
   
-  getAllPages <- function(link){
+  getAllPages <- function(link){ #Funktion nimmt eine Url und speichert die URL des "Next" Buttons in einer Liste
     links <<- c(links, link)
     
     read_html(link) %>%
       html_nodes('.next a') %>%
       html_attr('href') -> linknext
     
-    if(length(linknext) > 0){
-      getAllPages(paste0(url,linknext,sep=""))
+    if(length(linknext) > 0){ #Checkt ob es einen "Next"-Link gibt, falls nicht endet die Funktion
+      getAllPages(paste0(url,linknext,sep="")) #Recursive function
     }else{
       return(links)
     }
   }
   
-  allLinks = getAllPages(link)
+  allLinks = getAllPages(link) #Ruft die Funktion auf
   
-  allQuotes <- map_df(allLinks,getQuotes)
+  allQuotes <- map_df(allLinks,getQuotes) #Auf jede URL der Liste wird getQuotes angewendet und als df gespeichert
   return(allQuotes)
 }
 
@@ -72,11 +71,11 @@ test_b <- getAllQuotes(url)
 #c) ------------------------------------------------------------------------------- 
 
 
-getAuthorUrls <- function(link){
+getAuthorUrls <- function(link){ #wie getAllQuotes, nur für Autoren-URLs einer(!) Seite
   allLinks = list()
   links = list()
   
-    getAllPages <- function(link){
+    getAllPages <- function(link){ #Sammelt wieder alle Seiten
       links <<- c(links, link)
       
       read_html(link) %>%
@@ -92,7 +91,7 @@ getAuthorUrls <- function(link){
     
     allLinks = getAllPages(link)
     
-    getAuthors <- function(alink){
+    getAuthors <- function(alink){ #Sammelt jeden Author einer Seite
       
       read_html(alink) %>%
         html_nodes(".quote span a") %>%
@@ -103,17 +102,17 @@ getAuthorUrls <- function(link){
       return(urls)
     }
   
-  allAuthors = sapply(allLinks,getAuthors)
+  allAuthors = sapply(allLinks,getAuthors) #Auf jede URL der Liste wird getAuthors angewendet und als Liste gespeichert
   
-  allAuthors <- unique(as.list(allAuthors), incomparables = FALSE)
-  allAuthors <- unlist(allAuthors)
+  allAuthors <- unique(as.list(allAuthors), incomparables = FALSE) #Filtert doppelte Werte heraus (benötigt Liste?)
+  allAuthors <- unlist(allAuthors) #Löst liste wieder auf?
 }
 
 test_c <- getAuthorUrls(url)
 
 #d) 
 
-getDetails <- function(authorUrl){
+getDetails <- function(authorUrl){ #Funktion scrollt jede Autoren-URL und gibt Df mit Author, Beschreibung und Geburtsdatum zurück
   
   read_html(authorUrl) -> nodes
   
@@ -134,7 +133,7 @@ getDetails <- function(authorUrl){
 }
 test_d_getAuthorDetails = getDetails(aurl)
 
-allAuthorDetails = map_df(getAuthorUrls(url),getDetails)
+allAuthorDetails = map_df(getAuthorUrls(url),getDetails) #Wie getAllQuotes nur mit Autor-Daten
 
 
 
