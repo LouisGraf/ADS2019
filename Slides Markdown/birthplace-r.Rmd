@@ -1,0 +1,17 @@
+---
+title: "birthplace-r.Rmd"
+author: "CF"
+date: "17 Juni 2019"
+output: html_document
+---
+
+```{r}
+library(leaflet)
+leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R") -> m
+htmlwidgets::saveWidget(m, "temp.html")
+
+m
+```
+
