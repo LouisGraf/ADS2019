@@ -1,6 +1,6 @@
 Applied Data Science
 ========================================================
-author: Webscraping with R
+author: Visualization with ggplot
 date: 18.03.2019
 autosize: false
 width: 1920
@@ -74,8 +74,8 @@ g2 = g2 + ylab("mpg (City)") + xlab("Displacement")
 g2 = g2 + labs(title = "Fuel Efficiency",
 		   subtitle = "(urban driving)",
 		   caption = "Source: ggplot::mpg")
-#g2 = g2 + geom_smooth(se = FALSE, method = "lm")
-g2 = g2 + geom_smooth()
+g2 = g2 + geom_smooth(se = FALSE, method = "lm")
+#g2 = g2 + geom_smooth()
 ```
 
 ***
@@ -174,7 +174,7 @@ Bars and Columns
 ====
 
 ```{r fig.height=10, fig.width=10}
-g = ggplot(mpg, aes(x=1,fill=class))
+g = ggplot(mpg, aes(x=as.factor(cyl),fill=class))
 g = g + geom_bar(position = "fill")
 g = g + scale_fill_brewer(palette="Paired")
 g
@@ -189,6 +189,7 @@ g = ggplot(mpg, aes(x=1,fill=class))
 g = g + geom_bar(position = "fill")
 g = g + scale_fill_brewer(palette="Paired")
 g = g + coord_polar("y", start = 0) 
+g = g + facet_wrap(.~cyl)
 g
 
 
@@ -312,10 +313,11 @@ Example: geom_point with colors / shapes (2)
 =====
 
 ```{r}
-g = ggplot(mpg %>%
-             gather(environment, milesPerGallon,8:9),
-           aes(x=displ, y=milesPerGallon))
-g = g + geom_point(aes(color=environment), size=4)
+mpg %>% gather(environment,
+               milesPerGallon,
+               8:9) %>%
+  ggplot(aes(x=displ, y=milesPerGallon)) +
+  geom_point(aes(color=environment), size=4)
 ```
 
 ***

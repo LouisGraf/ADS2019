@@ -1,8 +1,8 @@
 # Problem Set 3
 # Question 2
 
-# Name: Your Name
-# Matrikelnummer: Your matriculation number
+# Name: Louis Graf
+# Matrikelnummer: 2389931
 
 
 if (!file.exists("clinton_emails.rda")) {

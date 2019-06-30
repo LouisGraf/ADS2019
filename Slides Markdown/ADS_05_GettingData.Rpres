@@ -152,14 +152,14 @@ Example: Geocoding with google maps
 
 ```{r}
 library(jsonlite)
-key = readChar("googleAPIkey.txt", file.info("googleAPIkey.txt")$size)
-
-url = "https://maps.googleapis.com/maps/api/geocode/json?address="
-
-address = "'1600+Amphitheatre+Parkway,+Mountain+View,+CA'"
-
-geocode = fromJSON(paste0(url,address,"&key=",key))
-geocode$results$geometry$location
+# key = readChar("googleAPIkey.txt", file.info("googleAPIkey.txt")$size)
+# 
+# url = "https://maps.googleapis.com/maps/api/geocode/json?address="
+# 
+# address = "'1600+Amphitheatre+Parkway,+Mountain+View,+CA'"
+# 
+# geocode = fromJSON(paste0(url,address,"&key=",key))
+# geocode$results$geometry$location
 
 ```
 ***
