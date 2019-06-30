@@ -149,7 +149,7 @@ goal_contribution_clean_df <- goal_contribution_df %>%
 
 ## Description text
 desc_jovic <- "Eintracht Jovic: A whopphing 30% of goals contributed"
-desc_vardymurray <- "Scoring 37.5% and 37.1% of their team's goals, Jamie Vardy and Glen Murray have proven to be talismans for their team yet again!"
+desc_werner <- "Zwei Spieler mit W machen viele Tore!"
 desc_fraser <- "Another fantastic season from Ryan Fraser with 7 goals and 14 assists (one behind league-leader Hazard)"
 
 goal_contribution_clean_df %>%
@@ -160,15 +160,15 @@ goal_contribution_clean_df %>%
 goal_contribution_clean_df %>% 
   ggplot(aes(assist_contrib, goal_contrib)) +
   geom_point(data = goal_contribution_clean_df %>%
-               filter(goal_contrib < 0.15 | assist_contrib < 0.15),
+               filter(goal_contrib < 0.25 | assist_contrib < 0.15),
              color = "grey20", size = 4, alpha = 0.2) +
   geom_point(data = goal_contribution_clean_df %>%
-               filter(goal_contrib > 0.15 | assist_contrib > 0.15),
+               filter(goal_contrib > 0.25 | assist_contrib > 0.15),
              color = "red", size = 4) +
-  geom_hline(yintercept = 0.15, color = "grey20", alpha = 0.4) +
+  geom_hline(yintercept = 0.25, color = "grey20", alpha = 0.4) +
   geom_vline(xintercept = 0.15, color = "grey20", alpha = 0.4) +
   geom_text_repel(data = goal_contribution_clean_df %>%
-                    filter(goal_contrib > 0.15 | assist_contrib > 0.15, 
+                    filter(goal_contrib > 0.25 | assist_contrib > 0.15, 
                            !name %in% c(jovic, "R. Fraser", "J. Vardy", "G. Murray")),
                   aes(label = name, family = "Roboto Condensed", fontface = "bold"), 
                   seed = 15, size = 5, 
@@ -177,8 +177,8 @@ goal_contribution_clean_df %>%
   geom_mark_circle(aes(filter = name == jovic, label = "Luka Jović",
                        description = desc_jovic), 
                    label.family = "Roboto Condensed", label.fontsize = c(14, 10)) +
-  geom_mark_hull(aes(filter = name %in% c("G. Murray", "J. Vardy"), label = "Vardy & Murray",
-                     description = desc_vardymurray),
+  geom_mark_hull(aes(filter = name %in% c("W. Weghorst", "T. Werner"), label = "Werner & Weghorst",
+                     description = desc_werner),
                  label.buffer = unit(20, "mm"), label.fontsize = c(14, 10),
                  label.family = "Roboto Condensed") +
   geom_mark_circle(aes(filter = name == "R. Fraser", label = "Ryan Fraser",

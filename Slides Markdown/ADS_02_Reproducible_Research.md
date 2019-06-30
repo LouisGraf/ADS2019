@@ -344,7 +344,7 @@ Prof. Dr. Christoph Flath | ADS 2019</div>
 
 Data
 
-The atmos data set resides in the nasaweather package of the R programming language. It contains a collection of atmospheric variables measured between 1995 and 2000 on a grid of 576 coordinates in the western hemisphere.
+The atmos data set resides in the nasaweather package of the R programming language. It contains a collection of atmospheric variables measured between 1995 and 2000 on a grid of 576 coordinates in the western hemisphere. The data set comes from the 2006 ASA Data Expo.
 
 Some of the variables in the atmos data set are:
 

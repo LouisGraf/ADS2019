@@ -792,18 +792,18 @@ Webservice example
 * JSON call from google API - Retrieve bars within 500 meters of Sanderring 2
 
 ```{r}
-key = readChar("googleAPIkey.txt", file.info("googleAPIkey.txt")$size)
-URL <- paste0("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=",key)
-library(RCurl)
-library(RJSONIO)
-response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
+# key = readChar("googleAPIkey.txt", file.info("googleAPIkey.txt")$size)
+# URL <- paste0("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=49.7881799,9.93524&radius=500&types=bar&key=",key)
+ library(RCurl)
+ library(RJSONIO)
+# response_parsed <- fromJSON(getURL(URL,ssl.verifyhost = 0L, ssl.verifypeer = 0L))
 ```
 
 * The google webservice returns an XML file which is parsed by R into a list
 * Parsed response is a list of three lists, results are stored in the list results
 
 ```{r}
-names(response_parsed)
+# names(response_parsed)
 ```
 
 
@@ -821,10 +821,10 @@ Webservice example (2)
 ========================================================
 
 ```{r}
-names(response_parsed$results[[1]])
-response_parsed$results[[1]]$name
-response_parsed$results[[1]]$geometry$location
-response_parsed$results[[1]]$rating
+# names(response_parsed$results[[1]])
+# response_parsed$results[[1]]$name
+# response_parsed$results[[1]]$geometry$location
+# response_parsed$results[[1]]$rating
 
 ```
 
