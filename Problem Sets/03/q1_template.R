@@ -5,12 +5,14 @@ library(tidyverse)
 library(leaflet)
 library(raster)
 # Name: Louis Graf
+
 # Matrikelnummer: 2389931
+
 
 #1) 
 #a) -------------------------------------------------------
-#data = read_csv2("https://www.bundeswahlleiter.de/dam/jcr/5441f564-1f29-4971-9ae2b8860c1724d1/ew19_kerg2.csv",skip = 9)
-data = data.frame(read_csv2("Problem Sets/03/ew19_kerg2.csv", skip = 9)) #Richtige URL noch suchen ^
+data = read_csv2("https://www.bundeswahlleiter.de/dam/jcr/5441f564-1f29-4971-9ae2-b8860c1724d1/ew19_kerg2.csv",skip = 9)
+
 
 data %>%
   filter(Gruppenart == "Partei", Gebietsart == "Land") -> data_filtered
@@ -63,7 +65,13 @@ sp_data = merge(sp, winner, by.x = "NAME_1", by.y = "Gebietsname")
 
 #iv)
 #create a color palette to fill the polygons
-pal <- colorFactor("Blues", domain = sp_data$Gruppenname, n = 5) #ToDo: Farben den Parteien anpassen
+pal <- colorFactor(c(
+  'AfD'= 'blue',
+  'CDU'= 'black',
+  'CSU'='grey',
+  'FDP'='yellow',
+  'GRÜNE'='seagreen',
+  'SPD'='red'), domain = c("AfD", "CDU", "CSU", "FDP", "GRÜNE", "SPD"), n = 6)
 
 #Creating Pop-Ups
 polygon_popup <- paste0("<strong>Name: </strong>", sp_data$NAME_1, "<br>",
@@ -105,9 +113,6 @@ sp2 <- getData("GADM", country="DEU", level=2)
 sp_data2 = merge(sp2, winner2, by.x = "NAME_2", by.y = "Gebietsname")
 
 
-#create a color palette to fill the polygons
-pal2 <- colorFactor("Blues", domain = sp_data2$Gruppenname) #ToDo: Farben den Parteien anpassen
-
 #Creating Pop-Ups
 polygon_popup2 <- paste0("<strong>Name: </strong>", sp_data2$NAME_2, "<br>",
                         "<strong>Wahlsieger: </strong>", sp_data2$Gruppenname, "<br>",
@@ -118,7 +123,7 @@ leaflet() %>%
   addProviderTiles("CartoDB.Positron") %>% 
   setView(lat=10, lng=0 , zoom=2) %>% 
   addPolygons(data = sp_data2, 
-              fillColor= ~pal2(Gruppenname),
+              fillColor= ~pal(Gruppenname),
               fillOpacity = 0.4, 
               weight = 2, 
               color = "Black",

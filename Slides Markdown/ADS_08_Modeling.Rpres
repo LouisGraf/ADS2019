@@ -1,0 +1,313 @@
+Applied Data Science
+========================================================
+author: Modeling
+date: 02.07.2019
+autosize: false
+width: 1920
+height: 1080
+font-family: 'Arial'
+css: mySlideTemplate.css
+
+Credits
+======
+* http://www.rebeccabarter.com/blog/2019-06-06_pre_processing/
+
+
+Predictive modeling has many pitfalls
+=======
+
+* In principle pre-processing data in R for predictive modeling is fairly straightforward: However, simple things such as factor variables having different levels in the training data and test data, or a variable having missing values in the test data but not in the training data can seriously mess up this apparent simplicity
+
+* Also - similar functions have greatly varying syntax complicating comparison and benchmarking
+
+* Thanks to the `tidymodels` package ecosystem many problems are directly adressed
+    * `recipes` is a general data preprocessor with a modern interface. It can create model matrices that incorporate feature engineering, imputation, and other help tools.
+    * `rsample` has infrastructure for resampling data so that models can be assessed and empirically validated.
+    * `yardstick` contains tools for evaluating models (e.g. accuracy, RMSE, etc.)
+    * `parsnip` separates the definition of a model from its evaluation
+    * `infer` is a modern approach to statistical inference
+
+
+The fundamentals of pre-processing your data using recipes
+========================================================
+Creating a `recipe` has three steps:
+
+* Get the ingredients (`recipe()`): specify the response variable and predictor variables
+
+* Write the recipe (`step_zzz()`): define the pre-processing steps, such as imputation, creating dummy variables, scaling, and more
+
+* Prepare the recipe (`prep()`): provide a dataset to base each step on (e.g. if one of the steps is to remove variables that only have one unique value, then you need to give it a dataset so it can decide which variables satisfy this criteria to ensure that it is doing the same thing to every dataset you apply it to)
+
+* Bake the recipe (`bake()`): apply the pre-processing steps to your datasets
+
+A credit default example
+=====
+
+* Our goal will be to classify whether or not credit card customers will default on their debt
+
+```{r}
+library(tidyverse)
+credit = read.csv2("../Lecture Code/UCI_Credit_Card.csv", sep=",", dec=".")
+
+```
+
+* The variables and data look as follows
+
+```{r}
+names(credit)
+```
+
+
+Some data from Credit
+======
+
+```{r}
+glimpse(credit)
+```
+
+Some data from Credit
+======
+
+```{r}
+summary(credit[,1:13])
+```
+
+Some data from Credit
+======
+
+```{r}
+summary(credit[,12:25])
+```
+
+Train-test split for predictive modeling
+=====
+
+* We do some cleaning and renaming and then split the data 80%-20%.
+
+```{r}
+library(rsample)
+credit %>% 
+  rename(default = default.payment.next.month) %>%
+  mutate(MARRIAGE = as.factor(MARRIAGE),
+         SEX = as.factor(SEX),
+         EDUCATION = as.factor(EDUCATION)) %>%
+  dplyr::select(-ID) -> credit
+credit_split <- initial_split(credit, prop = 0.8, strata = "default")
+credit_train <- training(credit_split)
+credit_test <- testing(credit_split)
+```
+
+* Training Data: 
+```{r}
+nrow(credit_train)
+```
+
+* Test Data:
+```{r}
+nrow(credit_test)
+```
+
+
+Writing and applying the recipe
+=====
+* Now that the data is ready we can write some recipes and do some baking!
+* The first thing we need to do is get the ingredients. We can use formula notation within the `recipe()` function to do this * the thing we’re trying to predict is the variable to the left of the `~`, and the predictor variables are the things to the right of it
+    * When including all variables we can write `default ~ .`
+    
+```{r}
+library(tidymodels)
+# define the recipe (it looks a lot like applying the lm function)
+model_recipe <- recipe(default ~ ., 
+                       data = credit_train)
+
+summary(model_recipe)
+```
+    
+Writing the recipe steps
+====
+
+So now we have our ingredients, we are ready to write the recipe (i.e. describe our pre-processing steps). We write the recipe one step at a time. We have many steps to choose from, including:
+
+* `step_dummy()` creating dummy variables from categorical variables.
+
+* `step_zzzimpute()` where instead of "zzz" it is the name of a method, such as `step_knnimpute()`, `step_meanimpute()`, `step_modeimpute()`
+
+* `step_scale()`: normalize to have a standard deviation of 1
+
+* `step_center()`: center to have a mean of 0
+
+* `step_range()`: normalize numeric data to be within a pre-defined range of values
+
+* `step_pca()`: create principal component variables from your data
+
+* `step_nzv()`: remove variables that have (or almost have) the same value for every data point 
+
+You can also create your own step (https://tidymodels.github.io/recipes/articles/Custom_Steps.html)
+
+Writing the recipe steps (2)
+=====
+
+In each step, you need to specify which variables you want to apply it to. There are many ways to do this:
+
+* Specifying the variable name(s) as the first argument
+
+* Standard dplyr selectors: `everything()` applies the step to all columns, `contains()` allows you to specify column names that contain a specific string, `starts_with()` allows you to specify column names that start with a sepcific string,
+
+Functions that specify the role of the variables:
+
+* `all_predictors()` applies the step to the predictor variables only
+
+* `all_outcomes()` applies the step to the outcome variable(s) only
+
+Functions that specify the type of the variables:
+
+* `all_nominal()` applies the step to all variables that are nominal (categorical)
+
+* `all_numeric()` applies the step to all variables that are numeric
+
+Back to credit data
+=====
+```{r}
+
+model_recipe_steps <- model_recipe %>% 
+  # convert the additional ingredients variable to dummy variables
+  step_num2factor(default, PAY_0, PAY_2, PAY_3, PAY_4, PAY_5, PAY_6) %>%
+  step_dummy(SEX, EDUCATION, MARRIAGE, PAY_0, PAY_2, PAY_3, PAY_4, PAY_5, PAY_6) %>%
+  # rescale all numeric variables
+  step_scale(all_numeric()) %>%
+  step_nzv(all_predictors())
+```
+
+Note that we could have included `step_num2factor()` to fix SEX, EDUCATION and MARRIAGE
+
+***
+
+```{r}
+model_recipe_steps
+```
+
+
+Order of steps
+====
+
+https://tidymodels.github.io/recipes/articles/Ordering.html
+
+While your project’s needs may vary, here is a suggested order of potential steps that should work for most problems:
+
+* Impute
+* Individual transformations for skewness and other issues
+* Discretize (if needed and if you have no other choice)
+* Create dummy variables
+* Create interactions
+* Normalization steps (center, scale, range, etc)
+* Multivariate transformation (e.g. PCA, spatial sign, etc)
+
+
+Preparing and baking the recipe
+=====
+
+```{r}
+prepped_recipe <- prep(model_recipe_steps, training = credit_train)
+prepped_recipe
+```
+***
+
+```{r}
+credit_train_preprocessed <- bake(prepped_recipe, credit_train)
+credit_test_preprocessed <- bake(prepped_recipe, credit_test)
+
+credit_train_preprocessed
+```
+
+Specifying the models
+====
+
+```{r}
+logistic_glm <-
+  logistic_reg(mode = "classification") %>%
+  set_engine("glm") %>%
+  fit(default ~ ., data = credit_train_preprocessed)
+
+rf_mod <- 
+  rand_forest(
+    mode = "classification",
+    trees = 250) %>%
+  set_engine("ranger") %>%
+  fit(default ~ ., data = credit_train_preprocessed)
+
+```
+
+***
+
+```{r eval=FALSE, include=TRUE}
+boost_mod <-
+  boost_tree(mode = "classification",
+             trees = 1500,
+             mtry = 3,
+             learn_rate = 0.03,
+             sample_size = 1,
+             tree_depth = 5) %>%
+  set_engine("xgboost") %>%
+    fit(default ~ ., data = credit_train_preprocessed)
+```
+
+Running predictions
+=====
+
+```{r eval=FALSE, include=TRUE}
+predictions_glm <- logistic_glm %>%
+  predict(new_data = credit_test_preprocessed) %>%
+  bind_cols(credit_test_preprocessed %>% dplyr::select(default))
+
+predictions_rf <- rf_mod %>%
+  predict(new_data = credit_test_preprocessed) %>%
+  bind_cols(credit_test_preprocessed %>% dplyr::select(default))
+
+predictions_boost <- boost_mod %>%
+  predict(new_data = credit_test_preprocessed) %>%
+  bind_cols(credit_test_preprocessed %>% dplyr::select(default))
+```
+
+Evaluating the results
+====
+
+```{r eval=FALSE, include=TRUE}
+predictions_glm %>%
+  conf_mat(default, .pred_class)
+predictions_rf %>%
+  conf_mat(default, .pred_class)
+```
+***
+```{r eval=FALSE, include=TRUE}
+predictions_boost %>%
+  conf_mat(default, .pred_class)
+```
+
+Evaluating the results (2)
+====
+```{r eval=FALSE, include=TRUE}
+predictions_glm %>%
+  conf_mat(default, .pred_class) %>%
+  summary() %>%
+  dplyr::select(-.estimator) %>%
+  filter(.metric %in%
+    c("accuracy", "mcc", "f_meas"))
+
+predictions_rf %>%
+  conf_mat(default, .pred_class) %>%
+  summary() %>%
+  dplyr::select(-.estimator) %>%
+  filter(.metric %in%
+    c("accuracy", "mcc", "f_meas"))
+
+```
+***
+```{r eval=FALSE, include=TRUE}
+predictions_boost %>%
+  conf_mat(default, .pred_class) %>%
+  summary() %>%
+  dplyr::select(-.estimator) %>%
+  filter(.metric %in%
+    c("accuracy", "mcc", "f_meas"))
+```
+

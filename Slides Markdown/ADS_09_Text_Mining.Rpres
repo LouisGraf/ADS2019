@@ -1,0 +1,610 @@
+Applied Data Science
+========================================================
+author: Text Mining
+date: 09.07.2019
+autosize: false
+width: 1920
+height: 1080
+font-family: 'Arial'
+css: mySlideTemplate.css
+
+Credits
+======
+* The main parts of this lecture and the R examples follow from the fantastic tutorials provided by
+
+* http://juliasilge.com/blog/Life-Changing-Magic/
+
+* http://juliasilge.com/blog/Term-Frequency-tf-idf/
+
+* https://www.tidytextmining.com/index.html
+
+* https://www.hvitfeldt.me/blog/text-classification-with-tidymodels/
+
+The tidytext package
+====
+As described by Hadley Wickham, `tidy` data has a specific structure:
+* each variable is a column
+* each observation is a row
+* each type of observational unit is a table
+
+The goal of the `tidytext` package is to provide functions and supporting data sets to allow
+* conversion of text to and from tidy formats
+* to switch seamlessly between tidy tools and existing text mining packages
+
+En passant we benefit from the familiar pipe structure
+
+A first minimal example: Getting all words from Jane Austen's novels
+====
+
+```{r include=FALSE}
+library(tidyverse)
+library(janeaustenr)
+library(tidytext)
+library(textdata)
+library(stringr)
+#library(widyr)
+library(gutenbergr)
+library(scales)
+library(ggraph)
+library(igraph)
+library(tidymodels)
+library(textrecipes)
+```
+
+
+```{r}
+original_books <- austen_books() 
+
+original_books
+```
+
+***
+
+```{r}
+original_books %>%
+  unnest_tokens(word, text) -> tidy_books
+
+tidy_books
+```
+
+Retaining information by annotating beforehand
+=====
+```{r}
+austen_books() %>%
+        group_by(book) %>%
+        mutate(linenumber = row_number(),
+               chapter = cumsum(str_detect(text,
+                                           regex("^chapter [\\divxlc]",                                                 			ignore_case = T)
+                                           )
+                                )
+               ) %>%
+        ungroup() -> original_books
+
+head(original_books)
+```
+
+***
+
+```{r}
+
+original_books %>%
+  unnest_tokens(word, text) -> tidy_books
+
+head(tidy_books)
+```
+
+A not so helpful word count
+=====
+
+```{r}
+tidy_books %>%
+        count(word, sort = TRUE)
+```
+
+What should we do next?
+
+Stop words to the resuce!
+====
+
+* Since the data is in one-word-per-row format, we can just use our `dplyr` skills
+* For example, we can remove stop words with an `anti_join`
+* tidytext provides `stop_words` for English texts
+
+
+```{r}
+data("stop_words")
+tidy_books %>%
+anti_join(stop_words) -> tidy_books
+```
+
+
+
+***
+
+
+```{r}
+tidy_books %>%
+        count(word, sort = TRUE)
+```
+
+Super-short sentiment analysis
+====
+
+* The tidytext package provides multiple sentiment lexicons
+* The standard option offers numeric values
+
+
+
+```{r}
+
+get_sentiments()
+
+
+```
+
+***
+
+* The bing dictionary is binary
+
+```{r}
+
+
+get_sentiments("bing") -> bing
+
+bing
+```
+
+* Sentiment analysis boils down to an `inner_join`
+
+
+Programming Task
+====
+
+* Examine how sentiment changes changes during each novel
+* Find a sentiment score for each word using the Bing lexicon
+* Count the number of positive and negative words in defined sections of each novel
+* Plot sentiment scores across the plot trajectory of each novel
+
+Single words may not be enough
+====
+
+* Lots of useful work can be done by tokenizing at the word level, but sometimes it is useful or necessary to look at different units of text
+* For example, some sentiment analysis algorithms look beyond only unigrams (i.e. single words) to try to understand the sentiment of a sentence as a whole
+* Example: "I am not having a good day."
+* The negation create a negative sentiment despite the positive word good!
+* To circumvent such pitfalls we want to tokenize on the sentence level
+* Afterwards special packages like `sentimentr` can be used to detect sentence sentiment
+
+Tokeninzing Sentences: A Jane Austen Quote Generator
+====
+```{r}
+austen_books() %>% 
+        group_by(book) %>% 
+        unnest_tokens(sentence, text, token = "sentences") %>% 
+        ungroup() %>%
+        filter(stringr::str_detect(sentence, pattern = " ")) -> austen_sentences
+
+x = 1:length(austen_sentences$book)
+
+
+```
+
+
+***
+
+```{r}
+austen_sentences$sentence[sample(x,5)]
+```
+
+Programming Task
+=====
+
+* Get the list of negative words from the Bing lexicon
+* Make a dataframe of how many words are in each chapter so we can normalize for the length of chapters
+* Find the number of negative words in each chapter and divide by the total words in each chapter
+* Which chapter has the highest proportion of negative words?
+
+Networks of Words
+=====
+* Another function in `widyr` is `pairwise_count`, which counts pairs of items that occur together within a group.
+
+* Let's count the words that occur together in the lines of Pride and Prejudice.
+
+```{r}
+pride_prejudice_words <- tidy_books %>%
+        filter(book == "Pride & Prejudice")
+
+word_cooccurences <- pride_prejudice_words %>%
+        widyr::pairwise_count(word, linenumber, sort = TRUE)
+
+word_cooccurences
+
+```
+
+***
+
+```{r}
+word_cooccurences %>%
+  filter(item1 == "darcy")
+
+```
+
+Plotting the word network
+====
+
+It is nice to plot a network of co-occuring words.
+
+
+```{r}
+
+
+set.seed(1813)
+word_cooccurences %>%
+        filter(n >= 10) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "darkslategray4", size = 5) +
+        geom_node_text(aes(label = name), vjust = 1.8) +
+        ggtitle(expression(paste("Word Network in Jane Austen's ", 
+                                 italic("Pride and Prejudice")))) +
+        theme_void() -> g1
+
+```
+
+***
+
+```{r}
+emma_words <- tidy_books %>%
+        filter(book == "Emma")
+word_cooccurences <- emma_words %>%
+        widyr::pairwise_count(word, linenumber, sort = TRUE)
+word_cooccurences %>%
+        filter(n >= 10) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "plum4", size = 5) +
+        geom_node_text(aes(label = name), vjust = 1.8) +
+        ggtitle(expression(paste("Word Network in Jane Austen's ", 
+                                 italic("Emma")))) +
+        theme_void() -> g2
+
+```
+
+Networks
+====
+
+```{r}
+g1
+```
+
+***
+
+```{r}
+g2
+```
+
+
+
+
+Term Frequency Analysis
+====
+
+* A common task in text mining is to look at word frequencies and to compare frequencies across different texts
+* We can do this using tidy data principles pretty smoothly. We already have Jane Austen's works; let's get another text to compare to.
+* `gutenbergr` allows to download full texts from project Gutenberg through `R`
+* Let’s look at some science fiction and fantasy novels by H.G. Wells, who lived in the late 19th and early 20th centuries
+_The Time Machine_, _The War of the Worlds_, _The Invisible Man_, and _The Island of Doctor Moreau_.
+
+***
+
+```{r}
+
+hgwells <- gutenberg_download(c(35, 36, 5230, 159))
+
+hgwells %>%
+   unnest_tokens(word, text) %>%
+   anti_join(stop_words) -> tidy_hgwells
+```
+
+Comparing Word Frequency through ratios
+====
+
+```{r}
+tidy_hgwells %>%
+  mutate(word = str_extract(word, "[a-z]+")) %>%
+  count(word) %>%
+  rename(HGWells = n) %>%
+  inner_join(count(tidy_books, word)) %>%
+  rename(Austen = n) %>%
+  mutate(HGWells = HGWells / sum(HGWells),
+         Austen = Austen / sum(Austen)) %>%
+  ungroup() -> frequency
+```
+
+***
+
+```{r}
+frequency %>%
+  gather(author, freq, HGWells, Austen) %>%
+  group_by(author) %>%
+  arrange(-freq) %>%
+  head(10)
+```
+
+
+Comparing Word Frequencies throug ratios
+====
+
+```{r}
+ggplot(frequency, aes(x = HGWells, y = Austen, color = abs(Austen - HGWells))) +
+        geom_abline(color = "gray40") +
+        geom_jitter(alpha = 0.1, size = 2.5, width = 0.4, height = 0.4) +
+        geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
+        scale_x_log10(labels = percent_format()) +
+        scale_y_log10(labels = percent_format()) +
+        scale_color_gradient(limits = c(0, 0.001), low = "darkslategray4", high = "gray75") +
+        theme_minimal(base_size = 14) +
+        theme(legend.position="none") +
+        labs(title = "Comparing Word Frequencies",
+             y = "Jane Austen", x = NULL) -> g
+```
+
+***
+
+```{r}
+g
+```
+
+Limits of term frequency
+====
+
+* One of our key text mining questions was to assess what a document is about
+    * Can we do this by looking at the words that make up the document?
+* One way to approach how important a word can be is its term frequency (_tf_), how frequently a word occurs in a document.
+    * There are words in a document, though, that occur many times but may not be important; in English, these are probably words like "the", "is", "of", and so forth.
+    * A list of stop words is not a sophisticated approach to adjusting term frequency for commonly used words as it is possible that some of these words might be more important in some documents than others.
+
+Inverse Term Frequency
+=====
+
+* Another approach is to look at a term's inverse document frequency (_idf_)
+
+* _Idf_ decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents
+
+* This can be combined with term frequency to calculate a term's _tf-idf_, the frequency of a term adjusted for how rarely it is used
+
+***
+
+* The inverse document frequency for any given term is defined as
+
+$$idf(term) = ln \left( \frac{n_{docs}}{n_{docs \quad containing \quad term}} \right) $$
+
+Super quick physics example
+====
+
+```{r}
+physics <- gutenberg_download(c(37729, 14725, 13476),
+                              meta_fields = "author")
+
+physics %>%
+        unnest_tokens(word, text) %>%
+        count(author, word, sort = TRUE) %>%
+        ungroup() -> physics_words
+
+physics_words %>%
+        bind_tf_idf(word, author, n) -> physics_words
+
+physics_words %>%
+  group_by(author) %>%
+  arrange(desc(tf_idf)) %>%
+  top_n(15, tf_idf) %>%
+    ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(x=word, y=tf_idf))+
+  geom_col() + 
+  coord_flip() + 
+  facet_wrap(~author, scales="free") -> g
+```
+
+***
+
+```{r}
+g
+```
+
+Supervised Learning with textual data
+====
+
+Congressional Bill Dataset:
+
+A sample dataset containing labeled bills from the United States Congress, compiled by Professor John D. Wilkerson at the University of Washington, Seattle and E. Scott Adler at the University of Colorado, Boulder.
+
+Can we train a classifier to predict which topic a bill covers?
+
+
+```{r}
+
+
+USCongress = read.csv2("USCongress.csv")
+
+major_topics <- tibble(
+  major = c(1:10, 12:21, 99),
+  label = c("Macroeconomics", "Civil rights, minority issues, civil liberties",
+            "Health", "Agriculture", "Labor and employment", "Education", "Environment",
+            "Energy", "Immigration", "Transportation", "Law, crime, family issues",
+            "Social welfare", "Community development and housing issues",
+            "Banking, finance, and domestic commerce", "Defense",
+            "Space, technology, and communications", "Foreign trade",
+            "International affairs and foreign aid", "Government operations",
+            "Public lands and water management", "Other, miscellaneous")
+)
+```
+
+***
+
+* Set up data and test/train split
+
+```{r}
+USCongress %>%
+    mutate(text = as.character(text)) %>%
+    left_join(major_topics) %>%
+  select(text, label) %>%
+  mutate(label = as.factor(label)) -> congress
+
+congress_split <- initial_split(congress, strata = "label", p = 0.75)
+train_data <- training(congress_split)
+test_data <- testing(congress_split)
+```
+
+Text Recipes
+====
+
+```{r}
+text_rec <- recipe(label ~ ., data = train_data) %>%
+  step_filter(text != "") %>%
+  step_tokenize(text) %>%
+  step_tokenfilter(text, min_times = 11) %>%
+  step_tf(text) %>%
+  prep(training = train_data)
+
+text_train_data <- juice(text_rec)
+text_test_data  <- bake(text_rec, test_data)
+
+str(text_train_data, list.len = 10)
+```
+
+***
+Train a Random Forest Model
+
+```{r}
+rf_model <- rand_forest(trees = 20,
+                        mode = "classification") %>%
+  set_engine("randomForest")
+rf_model
+
+
+text_model <- rf_model %>%
+  fit(label ~ ., data = text_train_data)
+
+```
+
+Evaluation
+====
+
+```{r}
+eval_tibble = predict(text_model, text_test_data, type = "class")
+eval_tibble$label = text_test_data$label
+
+eval_tibble %>%
+  accuracy(truth = label, estimate =  .pred_class )
+```
+
+***
+
+```{r}
+eval_tibble %>%
+  mutate(combined = paste(substr(label,1,10), substr(.pred_class,1,5), sep =" | ")) %>%
+  group_by(combined) %>%
+  tally() %>%
+  arrange(-n) %>% 
+  print(n=20)
+    
+```
+
+
+
+
+Topic Modelling
+====
+
+* In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into natural groups so that we can understand them separately
+
+* Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for
+
+Latent Dirichlet Allocation (LDA)
+====
+
+* Latent Dirichlet allocation is one of the most common algorithms for topic modeling. We can understand it as being guided by two principles.
+
+    * Every document is a mixture of topics. We imagine that each document may contain words from several topics in particular proportions. For example, in a two-topic model we could say “Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B.”
+    
+    * Every topic is a mixture of words. For example, we could imagine a two-topic model of American news, with one topic for “politics” and one for “entertainment.” The most common words in the politics topic might be “President”, “Congress”, and “government”, while the entertainment topic may be made up of words such as “movies”, “television”, and “actor”. Importantly, words can be shared between topics; a word like “budget” might appear in both equally.
+
+***
+
+Two main ouputs emerge from an LDA
+
+* Word-topic probabilities: The tidytext package provides this method for extracting the per-topic-per-word probabilities, called beta, from the model
+
+* Document-topic probabilities: Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics
+We want to examine the per-document-per-topic probabilities, called gamma.
+
+
+
+LDA on US Congress Data
+====
+*Prepare term document matrix and run LDA
+
+```{r}
+congress %>%
+  mutate(documentID = row_number()) %>%
+  select(text, documentID) %>%
+  unnest_tokens(word, text) %>%
+  anti_join(stop_words) %>%
+  count(documentID, word, sort = TRUE) %>%
+  cast_dtm(documentID, word, n) -> tdm
+
+congress_lda <- topicmodels::LDA(tdm,
+                                 k = 20, 
+                                 control = list(seed = 1234))
+congress_lda
+```
+
+***
+* Explore topics
+
+
+```{r}
+congress_topics <- tidy(congress_lda, matrix = "beta")
+congress_topics %>%
+  group_by(topic) %>%
+  top_n(1, beta)
+```
+
+Results
+====
+
+```{r}
+congress_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta) -> congress_top_terms
+
+congress_top_terms %>%
+  mutate(term = reorder(term, beta)) %>%
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip() -> g
+```
+
+***
+
+```{r}
+congress_top_terms
+```
+
+Visualization
+====
+
+```{r fig.height=15, fig.width=30}
+g
+```
+
+Text Mining Overview
+====
+
+![task view](https://www.tidytextmining.com/images/tidyflow-ch-6.png)
