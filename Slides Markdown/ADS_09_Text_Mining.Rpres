@@ -135,23 +135,23 @@ Super-short sentiment analysis
 
 
 
-```{r}
-
-get_sentiments()
-
-
-```
+# ```{r}
+# 
+# get_sentiments()
+# 
+# 
+# ```
 
 ***
 
 * The bing dictionary is binary
 
-```{r}
-
-
-get_sentiments("bing") -> bing
-
-bing
+# ```{r}
+# 
+# 
+# get_sentiments("bing") -> bing
+# 
+# bing
 ```
 
 * Sentiment analysis boils down to an `inner_join`
@@ -479,8 +479,7 @@ str(text_train_data, list.len = 10)
 Train a Random Forest Model
 
 ```{r}
-rf_model <- rand_forest(trees = 20,
-                        mode = "classification") %>%
+rf_model <- rand_forest(trees = 20,mode = "classification") %>%
   set_engine("randomForest")
 rf_model
 

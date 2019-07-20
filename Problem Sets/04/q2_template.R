@@ -1,8 +1,8 @@
 # Problem Set 4
 # Question 2
 
-# Name: Your Name
-# Matrikelnummer: Your matriculation number
+# Name: Louis Graf
+# Matrikelnummer: 2389931
 
 require(tidyverse)
 library(foreign)
@@ -18,107 +18,91 @@ getDocument = function(x){paste(unlist(scan(x, what="character",quiet = T)),coll
 getCategory = function(x){paste(unlist(strsplit(x, split='/', fixed=TRUE))[1])}
 
 #map Text & Category for each file
-book_data = data.frame(document=1:2225, text=map_chr(files, getDocument), category = map_chr(files, getCategory))
-book_data$category = as.character(book_data$category)
-book_data$text = as.character(book_data$text)
+article_data = data.frame(document=1:2225, text=map_chr(files, getDocument), category = map_chr(files, getCategory))
+
+#Turn text into char
+article_data$category = as.character(article_data$category)
+article_data$text = as.character(article_data$text)
 
 
-
-List <- strsplit(book_data$text, " ")
-book_data<- data.frame(document = rep(book_data$document,sapply(List, length)),category = rep(book_data$category,sapply(List, length)), word = unlist(List))
-book_data$word <- tolower(book_data$word)
-book_data$word <- gsub("[[:punct:]]", "", book_data$word)
+#Split articles into word-vectors & clean data
+wordList <- strsplit(article_data$text, " ")
+article_data<- data.frame(document = rep(article_data$document,sapply(wordList, length)),category = rep(article_data$category,sapply(wordList, length)), word = unlist(wordList))
+article_data$word <- tolower(article_data$word)
+article_data$word <- gsub("[[:punct:]]", "", article_data$word)
 
 #b) --------------------------------
+#Remove Stopwords
 data("stop_words")
 
-book_data %>%
+article_data %>%
   anti_join(stop_words) %>%
   group_by(category) %>%
   count(word, sort = TRUE) %>% 
-  filter(word != "") -> book_freq
+  filter(word != "") -> article_freq
 
-book_freq %>%
+article_freq %>%
   bind_tf_idf(word, category, n) -> idf_freq
 
-#
+idf_freq %>%
+  group_by(category) %>%
+  arrange(desc(tf_idf)) %>%
+  top_n(15, tf_idf) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(x=word, y=tf_idf))+
+  geom_col() + 
+  coord_flip() + 
+  facet_wrap(~category, scales="free")
 
 #c -----------------------
+
 #LDA
-category_dm <- book_freq %>%
+category_dtm <- article_freq %>%
   cast_dtm(category, word, n)
 
-category_lda <- LDA(category_dm, k = n_distinct(book_freq$category), control = list(seed = 1234))
-category_lda_td <- tidy(category_lda)
+category_lda <- LDA(category_dtm, k = n_distinct(article_freq$category), control = list(seed = 1234))
+
 
 #Top Terms per Category
+category_lda_td <- tidy(category_lda)
+
 top_terms <- category_lda_td %>%
   group_by(topic) %>%
   top_n(10, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
 
+      #Visuzalizing
+      top_terms %>%
+        mutate(term = reorder_within(term, beta, topic)) %>%
+        ggplot(aes(term, beta)) +
+        geom_bar(stat = "identity") +
+        scale_x_reordered() +
+        theme(axis.text.x = element_text(angle = 90, size = 10, vjust = - 0.01)) +
+        facet_wrap(~ topic, scales = "free_x")
 
-#Visuzalizing
-top_terms %>%
-  mutate(term = reorder_within(term, beta, topic)) %>%
-  ggplot(aes(term, beta)) +
-  geom_bar(stat = "identity") +
-  scale_x_reordered() +
-  theme(axis.text.x = element_text(angle = 90, size = 10, vjust = - 0.01)) +
-  facet_wrap(~ topic, scales = "free_x")
-
-#per-document classification
-book_split <- initial_split(book_freq, strata = "category", p = 0.80)
-book_train <- training(book_split)
-book_test <- testing(book_split)
-
-text_rec <- recipe(category ~ ., data = book_train) %>%
-  prep(training = book_train)
-
-book_train_data <- juice(text_rec)
-book_test_data  <- bake(text_rec, book_test)
-
-str(book_train_data, list.len = 10)
+      
+#By word assignment
+category_topics <- tidy(category_lda, matrix = "beta")
 
 
-
-#Random Forest
-# rf_model <- rand_forest(trees = 20,mode = "classification") %>%
-#   set_engine("randomForest")
-# rf_model
-# 
-# 
-# text_model <- rf_model %>%  #Error: cannot allocate vector of size 10.7 Gb LOL
-#   fit(category ~ ., data = book_train_data)
-
-train_preprocessed <- bake(text_rec, book_train_data)
-test_preprocessed <- bake(text_rec, book_test_data)
-
-
-text_model <- rand_forest(
-  mode = "classification",
-  trees = 250) %>%
-  set_engine("ranger") %>%
-  fit(category ~ ., data = book_train_data)
-
-predictions_rf <- text_model %>%
-  predict(new_data = test_preprocessed) %>%
-  bind_cols(test_preprocessed %>% dplyr::select(category))
+      #Visuzalizing
+          top_terms_category <- category_topics %>%
+            group_by(topic) %>%
+            top_n(5, beta) %>%
+            ungroup() %>%
+            arrange(topic, -beta)
+          
+          top_terms_category
+      
+          top_terms_category %>%
+            mutate(term = reorder(term, beta)) %>%
+            ggplot(aes(term, beta, fill = factor(topic))) +
+            geom_col(show.legend = FALSE) +
+            facet_wrap(~ topic, scales = "free") +
+            coord_flip()
 
 
 
-# eval_tibble = predict(text_model, book_test_data, type = "class")
-# eval_tibble$category = book_test_data$category
-# 
-# 
-# eval_tibble %>%
-#   accuracy(truth = category, estimate =  .pred_class )
-# 
-# 
-# eval_tibble %>%
-#   mutate(combined = paste(substr(label,1,10), substr(.pred_class,1,5), sep =" | ")) %>%
-#   group_by(combined) %>%
-#   tally() %>%
-#   arrange(-n) %>% 
-#   print(n=20)
+

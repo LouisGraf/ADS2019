@@ -1,8 +1,8 @@
 # Problem Set 4
 # Question 1
 
-# Name: Your Name
-# Matrikelnummer: Your matriculation number
+# Name: Louis Graf
+# Matrikelnummer: 2389931
 
 library(tidyverse)
 library(hexbin)
@@ -17,8 +17,7 @@ bball_data = read_csv2("Problem Sets/04/basketball_complete.csv")
 
 bball_data %>%
   ggplot(aes(x = loc_x, y = loc_y, z = shot_made_flag)) +
-  stat_summary_hex(fun = "mean", colour = "grey") + 
-  stat_bin_hex() +
+  stat_summary_hex(fun = "mean",) +
   theme_bw()
 
 #b) -------------------------------
@@ -30,12 +29,14 @@ bball_test <- testing(bball_split)
 
 
 #Building the recipe
-recipe <- recipe(shot_made_flag ~ combined_shot_type + loc_x + loc_y + period + minutes_remaining + shot_distance + shot_type, data = bball_train)
+recipe <- recipe(shot_made_flag ~ . , data = bball_train)
 
 recipe %>%
   step_num2factor(shot_made_flag) %>%
+  step_string2factor(season) %>%
   step_dummy(shot_type, combined_shot_type) %>%
-  step_nzv(all_predictors()) -> recipe_steps
+  step_nzv(all_predictors()) %>%
+  step_scale(all_numeric())-> recipe_steps
 
 
 
@@ -52,11 +53,13 @@ logistic_glm <- logistic_reg(mode = "classification") %>%
   set_engine("glm") %>%
   fit(shot_made_flag ~ ., data = train_preprocessed)
 
+
 rf_mod <- rand_forest(
-    mode = "classification",
-    trees = 250) %>%
+          mode = "classification",
+          trees = 250) %>%
   set_engine("ranger") %>%
   fit(shot_made_flag ~ ., data = train_preprocessed)
+
 
 boost_mod <- boost_tree(mode = "classification",
              trees = 1500,
@@ -68,15 +71,16 @@ boost_mod <- boost_tree(mode = "classification",
   fit(shot_made_flag ~ ., data = train_preprocessed)
 
 
-
 #Running Predictions
 predictions_glm <- logistic_glm %>%
   predict(new_data = test_preprocessed) %>%
   bind_cols(test_preprocessed %>% dplyr::select(shot_made_flag))
 
+
 predictions_rf <- rf_mod %>%
   predict(new_data = test_preprocessed) %>%
   bind_cols(test_preprocessed %>% dplyr::select(shot_made_flag))
+
 
 predictions_boost <- boost_mod %>%
   predict(new_data = test_preprocessed) %>%
@@ -86,35 +90,22 @@ predictions_boost <- boost_mod %>%
 
 #Evaluating the results
 predictions_glm %>%
-  conf_mat(shot_made_flag, .pred_class)
-
-predictions_rf %>%
-  conf_mat(shot_made_flag, .pred_class)
-
-predictions_boost %>%
-  conf_mat(shot_made_flag, .pred_class)
-
-
-
-#Evaluating the results 2
-predictions_glm %>%
   conf_mat(shot_made_flag, .pred_class) %>%
   summary() %>%
   dplyr::select(-.estimator) %>%
-  filter(.metric %in%
-           c("accuracy", "mcc", "f_meas"))
+  filter(.metric %in% c("accuracy", "mcc", "f_meas"))
+
 
 predictions_rf %>%
   conf_mat(shot_made_flag, .pred_class) %>%
   summary() %>%
   dplyr::select(-.estimator) %>%
-  filter(.metric %in%
-           c("accuracy", "mcc", "f_meas"))
+  filter(.metric %in% c("accuracy", "mcc", "f_meas"))
+
 
 predictions_boost %>%
   conf_mat(shot_made_flag, .pred_class) %>%
   summary() %>%
   dplyr::select(-.estimator) %>%
-  filter(.metric %in%
-           c("accuracy", "mcc", "f_meas"))
+  filter(.metric %in% c("accuracy", "mcc", "f_meas"))
 

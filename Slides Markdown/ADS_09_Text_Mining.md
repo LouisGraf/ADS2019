@@ -220,25 +220,215 @@ Super-short sentiment analysis
 
 
 
+# ```{r}
+# 
+# get_sentiments()
+# 
+# 
+# ```
+
+***
+
+* The bing dictionary is binary
+
+# ```{r}
+# 
+# 
+# get_sentiments("bing") -> bing
+# 
+# bing
+```
+
+* Sentiment analysis boils down to an `inner_join`
+
+
+Programming Task
+====
+
+* Examine how sentiment changes changes during each novel
+* Find a sentiment score for each word using the Bing lexicon
+* Count the number of positive and negative words in defined sections of each novel
+* Plot sentiment scores across the plot trajectory of each novel
+
+Single words may not be enough
+====
+
+* Lots of useful work can be done by tokenizing at the word level, but sometimes it is useful or necessary to look at different units of text
+* For example, some sentiment analysis algorithms look beyond only unigrams (i.e. single words) to try to understand the sentiment of a sentence as a whole
+* Example: "I am not having a good day."
+* The negation create a negative sentiment despite the positive word good!
+* To circumvent such pitfalls we want to tokenize on the sentence level
+* Afterwards special packages like `sentimentr` can be used to detect sentence sentiment
+
+Tokeninzing Sentences: A Jane Austen Quote Generator
+====
+
+```r
+austen_books() %>% 
+        group_by(book) %>% 
+        unnest_tokens(sentence, text, token = "sentences") %>% 
+        ungroup() %>%
+        filter(stringr::str_detect(sentence, pattern = " ")) -> austen_sentences
+
+x = 1:length(austen_sentences$book)
+```
+
+
+***
+
+
+```r
+austen_sentences$sentence[sample(x,5)]
+```
+
+```
+[1] "were the same fair prospect to arise at present as had flattered them a year ago, every thing, she was persuaded, would be hastening to the same vexatious conclusion."                                                
+[2] "i am so happy!"                                                                                                                                                                                                        
+[3] "crawford sat down likewise."                                                                                                                                                                                           
+[4] "\"but i thought, isabella, you had something in particular to tell me?\""                                                                                                                                              
+[5] "a house was never taken good care of, mr shepherd observed, without a lady: he did not know, whether furniture might not be in danger of suffering as much where there was no lady, as where there were many children."
+```
+
+Programming Task
+=====
+
+* Get the list of negative words from the Bing lexicon
+* Make a dataframe of how many words are in each chapter so we can normalize for the length of chapters
+* Find the number of negative words in each chapter and divide by the total words in each chapter
+* Which chapter has the highest proportion of negative words?
+
+Networks of Words
+=====
+* Another function in `widyr` is `pairwise_count`, which counts pairs of items that occur together within a group.
+
+* Let's count the words that occur together in the lines of Pride and Prejudice.
+
+
+```r
+pride_prejudice_words <- tidy_books %>%
+        filter(book == "Pride & Prejudice")
+
+word_cooccurences <- pride_prejudice_words %>%
+        widyr::pairwise_count(word, linenumber, sort = TRUE)
+
+word_cooccurences
+```
+
+```
+# A tibble: 101,100 x 3
+   item1     item2         n
+   <chr>     <chr>     <dbl>
+ 1 catherine lady         87
+ 2 lady      catherine    87
+ 3 miss      bingley      68
+ 4 bingley   miss         68
+ 5 miss      bennet       65
+ 6 bennet    miss         65
+ 7 miss      darcy        46
+ 8 darcy     miss         46
+ 9 william   sir          35
+10 sir       william      35
+# ... with 101,090 more rows
+```
+
+***
+
+
+```r
+word_cooccurences %>%
+  filter(item1 == "darcy")
+```
+
+```
+# A tibble: 750 x 3
+   item1 item2         n
+   <chr> <chr>     <dbl>
+ 1 darcy miss         46
+ 2 darcy elizabeth    23
+ 3 darcy bingley      15
+ 4 darcy looked        9
+ 5 darcy replied       8
+ 6 darcy love          8
+ 7 darcy friend        8
+ 8 darcy pemberley     8
+ 9 darcy cried         7
+10 darcy eyes          7
+# ... with 740 more rows
+```
+
+Plotting the word network
+====
+
+It is nice to plot a network of co-occuring words.
+
+
+
+```r
+set.seed(1813)
+word_cooccurences %>%
+        filter(n >= 10) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "darkslategray4", size = 5) +
+        geom_node_text(aes(label = name), vjust = 1.8) +
+        ggtitle(expression(paste("Word Network in Jane Austen's ", 
+                                 italic("Pride and Prejudice")))) +
+        theme_void() -> g1
+```
+
+***
+
+
+```r
+emma_words <- tidy_books %>%
+        filter(book == "Emma")
+word_cooccurences <- emma_words %>%
+        widyr::pairwise_count(word, linenumber, sort = TRUE)
+word_cooccurences %>%
+        filter(n >= 10) %>%
+        graph_from_data_frame() %>%
+        ggraph(layout = "fr") +
+        geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
+        geom_node_point(color = "plum4", size = 5) +
+        geom_node_text(aes(label = name), vjust = 1.8) +
+        ggtitle(expression(paste("Word Network in Jane Austen's ", 
+                                 italic("Emma")))) +
+        theme_void() -> g2
+```
+
+Networks
+====
+
+
+```r
+g1
+```
+
+![plot of chunk unnamed-chunk-15](ADS_09_Text_Mining-figure/unnamed-chunk-15-1.png)
+
+***
+
+
+```r
+g2
+```
+
+![plot of chunk unnamed-chunk-16](ADS_09_Text_Mining-figure/unnamed-chunk-16-1.png)
 
 
 
 
+Term Frequency Analysis
+====
 
+* A common task in text mining is to look at word frequencies and to compare frequencies across different texts
+* We can do this using tidy data principles pretty smoothly. We already have Jane Austen's works; let's get another text to compare to.
+* `gutenbergr` allows to download full texts from project Gutenberg through `R`
+* Let’s look at some science fiction and fantasy novels by H.G. Wells, who lived in the late 19th and early 20th centuries
+_The Time Machine_, _The War of the Worlds_, _The Invisible Man_, and _The Island of Doctor Moreau_.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+***
 
 
 
@@ -350,15 +540,23 @@ x igraph::simplify()      masks purrr::simplify()
 x yardstick::spec()       masks readr::spec()
 x recipes::step()         masks stats::step()
 Joining, by = "word"
-Quitting from lines 139-143 (ADS_09_Text_Mining.Rpres) 
-Fehler in menu(choices = c("Yes", "No"), title = title) : 
-  menu() cannot be used non-interactively
-Ruft auf: knit ... get_sentiments -> <Anonymous> -> load_dataset -> printer -> menu
+Determining mirror for Project Gutenberg from http://www.gutenberg.org/robot/harvest
+Using mirror https://cand.pglaf.org
+Quitting from lines 303-309 (ADS_09_Text_Mining.Rpres) 
+Fehler: Column `gutenberg_id` must be length 0 (the number of rows) or one, not 4
 Zusätzlich: Warnmeldungen:
 1: package 'janeaustenr' was built under R version 3.6.1 
 2: package 'tidytext' was built under R version 3.6.1 
 3: package 'textdata' was built under R version 3.6.1 
 4: package 'igraph' was built under R version 3.6.1 
 5: package 'textrecipes' was built under R version 3.6.1 
+6: In .f(.x[[i]], ...) :
+  Could not download a book at https://cand.pglaf.org/3/35/35.zip
+7: In .f(.x[[i]], ...) :
+  Could not download a book at https://cand.pglaf.org/3/36/36.zip
+8: In .f(.x[[i]], ...) :
+  Could not download a book at https://cand.pglaf.org/5/2/3/5230/5230.zip
+9: In .f(.x[[i]], ...) :
+  Could not download a book at https://cand.pglaf.org/1/5/159/159.zip
 Ausführung angehalten
 ```
